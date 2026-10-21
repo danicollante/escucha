@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123a5c">
+<title>Villeta Escucha · Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config/cliente.js"></script>
+<script src="assets/escucha.js"></script>
+<script>Escucha.aplicarTema();</script>
+<style>
+  :root { --pri:#123a5c; --pri-2:#1f5f8b; --on-pri:#f6ecd9; --acc:#c8862a; --acc-txt:#a8621a; --bg:#f6f1e7; --ink:#182532; --ink-2:#4d5a66; --line:#e3dccd;
+    --serif:'Fraunces', Georgia, serif; --sans:'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--sans); background:var(--bg); color:var(--ink); line-height:1.5; }
+  :focus-visible { outline:3px solid var(--pri-2); outline-offset:2px; }
+  .hero { background:var(--pri); color:var(--on-pri); }
+  .hero-in { max-width:1000px; margin:0 auto; padding:40px 20px 44px; display:flex; gap:24px; align-items:center; }
+  .hero img { height:110px; width:auto; background:#fff; border-radius:14px; padding:8px; flex-shrink:0; }
+  .kick { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--acc); font-weight:600; }
+  h1 { font-family:var(--serif); font-weight:600; font-size:clamp(30px, 6vw, 46px); line-height:1.08; margin:6px 0 10px; }
+  .lead { font-size:17px; max-width:56ch; opacity:.92; }
+  main { max-width:1000px; margin:0 auto; padding:28px 20px 48px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px; display:flex; flex-direction:column; }
+  .card h2 { font-family:var(--serif); font-weight:600; font-size:22px; color:var(--pri); margin-bottom:6px; }
+  .card p { color:var(--ink-2); font-size:15px; }
+  label { display:block; font-size:13px; font-weight:600; margin:16px 0 6px; }
+  select { width:100%; border:1.5px solid #cfc7b6; border-radius:10px; padding:10px; font:inherit; background:#fff; }
+  .qr-row { display:flex; gap:16px; align-items:center; margin-top:16px; }
+  #qr { background:#fff; padding:8px; border:1px solid var(--line); border-radius:10px; width:148px; height:148px; flex-shrink:0; }
+  #qr img, #qr canvas { width:130px !important; height:130px !important; }
+  .qr-note { font-size:13px; color:var(--ink-2); }
+  .btn { display:inline-flex; justify-content:center; align-items:center; gap:8px; background:var(--pri); color:var(--on-pri); text-decoration:none; border-radius:12px; padding:13px 18px; font-weight:600; margin-top:auto; }
+  .btn.sec { background:#fff; color:var(--pri); border:1.5px solid var(--pri); }
+  .acts { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+  .pasos { margin-top:28px; background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px; }
+  .pasos h2 { font-family:var(--serif); font-weight:600; font-size:20px; color:var(--pri); margin-bottom:12px; }
+  .pasos ol { padding-left:20px; display:grid; gap:8px; font-size:15px; }
+  .regla { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+  .regla div { border-radius:12px; padding:14px; font-size:14px; }
+  .regla b { display:block; font-family:var(--serif); font-size:17px; margin-bottom:2px; }
+  .neg { background:#fdeaea; color:#7a1d1d; } .pos { background:#e2f4ee; color:#0e5a44; }
+  footer { text-align:center; font-size:13px; color:var(--ink-2); padding:20px; border-top:1px solid var(--line); }
+  @media (max-width:760px) { .grid, .regla { grid-template-columns:1fr; } .hero-in { flex-direction:column; align-items:flex-start; padding-top:28px; } .hero img { height:84px; } }
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-in">
+  <img id="logo" alt="">
+  <div>
+    <div class="kick">Demo · Escucha ciudadana</div>
+    <h1 id="prod"></h1>
+    <p class="lead">Un QR en cada espacio público. El vecino opina en 5 segundos, reporta lo que anda mal y puede comprobar qué hizo el municipio.</p>
+  </div>
+</div></header>
+
+<main>
+  <div class="grid">
+    <section class="card">
+      <h2>1 · Lo que ve el vecino</h2>
+      <p>Esto es lo que abre el QR del tótem. Elegí un lugar y escaneá con el celular, o abrilo acá.</p>
+      <label for="lugar">Lugar</label>
+      <select id="lugar"></select>
+      <div class="qr-row">
+        <div id="qr" aria-label="Código QR del formulario"></div>
+        <p class="qr-note" id="qrNote">Cada lugar tiene su propio QR. Así el sistema sabe dónde se opinó sin preguntar.</p>
+      </div>
+      <div class="acts"><a class="btn" id="abrirForm" href="f/">Abrir formulario</a></div>
+    </section>
+
+    <section class="card">
+      <h2>2 · Lo que ve el municipio</h2>
+      <p>Qué atender hoy, casos con responsable y plazo, cierre con evidencia, mapa, satisfacción por lugar y control de calidad del dato.</p>
+      <div class="regla">
+        <div class="pos"><b>Las cuatro caritas</b>se registran con un toque, con el mismo esfuerzo.</div>
+        <div class="neg"><b>Si algo anda mal</b>el vecino puede contar qué pasó, marcar un peligro, sumar una foto y seguir el caso con un código.</div>
+      </div>
+      <div class="acts"><a class="btn" href="panel/">Abrir panel</a></div>
+    </section>
+  </div>
+
+  <section class="pasos">
+    <h2>Cómo probar la demo en vivo</h2>
+    <ol>
+      <li>Abrí el <b>panel</b> en una pestaña.</li>
+      <li>En otra pestaña del mismo navegador, abrí el <b>formulario</b>, tocá <b>Mal</b>, marcá un problema y enviá el reporte. Anotá el <b>código</b>.</li>
+      <li>En el panel aparece el aviso y el caso marcado como <b>Tu prueba</b> en <b>Atender hoy</b>. Asignalo, pasalo a en proceso y resolvelo escribiendo qué se hizo.</li>
+      <li>Volvé al formulario y tocá <b>Ver el estado del caso</b>: el vecino ve la respuesta. Si contesta “No, sigue igual”, el caso se reabre en el panel.</li>
+      <li>Para empezar de cero, usá <b>Borrar mis pruebas</b> en el panel.</li>
+    </ol>
+    <p style="margin-top:12px;font-size:13px;color:var(--ink-2)">En esta demo los datos viven en el navegador: el formulario y el panel deben abrirse en el mismo equipo. En producción, el formulario envía al servidor de Plugueo y el panel se actualiza desde cualquier dispositivo.</p>
+  </section>
+
+  <section class="pasos">
+    <h2>Datos confiables, también en clave política</h2>
+    <ul style="padding-left:20px;display:grid;gap:8px;font-size:15px">
+      <li><b>Una opinión por dispositivo, lugar y día.</b> Si alguien vuelve a opinar, se actualiza en vez de sumarse.</li>
+      <li><b>Ráfagas a revisión.</b> Muchas opiniones en pocos minutos en un mismo lugar no se cuentan hasta que alguien las revisa, y la decisión queda registrada.</li>
+      <li><b>Mismas reglas para elogios y críticas.</b> Una mala nota o una crítica a la gestión nunca es motivo de exclusión.</li>
+      <li><b>Cada cambio deja rastro:</b> quién asignó, quién cerró, qué se hizo y cuándo.</li>
+    </ul>
+    <p style="margin-top:12px;font-size:13px;color:var(--ink-2)">Ningún QR anónimo puede garantizar que cada opinión sea de una persona distinta. El sistema reduce y detecta el abuso, y muestra los límites del dato. En producción, estas reglas se aplican en el servidor, con límites de envío y verificación invisible ante actividad sospechosa.</p>
+  </section>
+</main>
+
+<footer>Datos y lugares de ejemplo · <span id="cli"></span> · con tecnología Plugueo</footer>
+
+<script>
+(function () {
+  const C = Escucha.C, $ = id => document.getElementById(id);
+  $("logo").src = C.logo; $("logo").alt = C.cliente; $("prod").textContent = C.producto; $("cli").textContent = C.cliente;
+  document.title = C.producto + " · Demo";
+  $("lugar").innerHTML = Object.entries(C.lugares).map(([id, l]) => `<option value="${id}">${l.nombre} · ${C.jerarquia.nivel} ${l.zona}</option>`).join("");
+  let qr = null;
+  function actualizar() {
+    const rel = "f/?p=" + $("lugar").value;
+    $("abrirForm").href = rel;
+    const url = new URL(rel, location.href).href;
+    $("qr").innerHTML = "";
+    if (window.QRCode) {
+      qr = new QRCode($("qr"), { text: url, width: 260, height: 260, colorDark: C.colores.primario, colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+    } else {
+      $("qr").textContent = "QR no disponible sin conexión";
+    }
+    if (location.protocol === "file:") $("qrNote").textContent = "El QR funciona para escanear con el celular una vez que la demo está publicada (por ejemplo en GitHub Pages).";
+  }
+  $("lugar").addEventListener("change", actualizar);
+  actualizar();
+})();
+</script>
+</body>
+</html>
