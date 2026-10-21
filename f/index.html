@@ -56,65 +56,28 @@
   .ok svg { width:44px; height:44px; flex-shrink:0; }
   .ok-t { font-weight:600; font-size:16px; }
   .ok-s { font-size:13.5px; color:var(--ink-2); }
-  .link { background:none; border:0; color:var(--pri-2); text-decoration:underline; font-size:14px; font-weight:500; cursor:pointer; padding:6px 0; }
+  .link { background:none; border:0; color:var(--pri-2); text-decoration:underline; font-size:14px; font-weight:500; cursor:pointer; padding:10px 4px; }
   .ok .link { margin-left:auto; flex-shrink:0; }
+  .nota { font-size:14px; color:var(--ink-2); text-align:center; line-height:1.5; margin-top:16px; }
 
   .detalle { margin-top:16px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; }
-  .detalle h2 { margin-bottom:2px; }
   .lbl { font-size:14.5px; font-weight:600; color:var(--ink); margin:14px 0 2px; display:block; }
   .lbl-sub { font-size:13px; color:var(--ink-2); margin-bottom:8px; }
-  .chips { display:flex; flex-wrap:wrap; gap:8px; }
-  .chip { border:1.5px solid #c9c1b0; background:#fff; color:var(--ink); font-size:14.5px; padding:8px 14px; border-radius:20px; cursor:pointer; min-height:42px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .chip { border:1.5px solid #c9c1b0; background:#fff; color:var(--ink); font-size:15px; padding:8px 16px; border-radius:22px; cursor:pointer; min-height:44px; }
   .chip[aria-pressed="true"] { background:var(--pri); border-color:var(--pri); color:var(--on-pri); }
-  .peligro { display:flex; gap:10px; align-items:flex-start; margin-top:14px; padding:10px 12px; border:1.5px solid #e9c6c6; background:#fff; border-radius:12px; cursor:pointer; }
-  .peligro[aria-pressed="true"] { border-color:#b42323; background:#fdeaea; }
-  .peligro .box { width:22px; height:22px; border:2px solid #b42323; border-radius:6px; flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:1px; }
-  .peligro[aria-pressed="true"] .box { background:#b42323; }
-  .peligro[aria-pressed="true"] .box::after { content:""; width:6px; height:11px; border:solid #fff; border-width:0 2.5px 2.5px 0; transform:rotate(45deg) translate(-1px,-1px); }
-  .peligro b { display:block; color:#8f1c1c; font-size:14.5px; }
-  .peligro span { font-size:13px; color:var(--ink-2); text-align:left; }
+  .chip[aria-pressed="true"]::before { content:"✓ "; }
   textarea { width:100%; border:1.5px solid #c9c1b0; border-radius:12px; padding:12px; font:inherit; font-size:16px; color:var(--ink); background:#fff; resize:vertical; min-height:84px; }
   textarea::placeholder { color:#6b7682; }
   textarea:focus { outline:none; border-color:var(--pri-2); }
   .cont { font-size:12.5px; color:var(--ink-2); text-align:right; margin-top:4px; }
-  .foto-row { display:flex; align-items:center; gap:12px; margin-top:8px; }
-  .btn-foto { display:inline-flex; align-items:center; gap:8px; border:1.5px dashed #b9b09c; background:#fff; border-radius:12px; padding:10px 14px; font-size:14.5px; cursor:pointer; min-height:44px; }
-  .thumb { position:relative; width:56px; height:56px; border-radius:10px; overflow:hidden; border:1px solid var(--line); }
-  .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
-  .thumb button { position:absolute; top:2px; right:2px; width:24px; height:24px; border-radius:50%; border:0; background:rgba(24,37,50,.85); color:#fff; font-size:14px; line-height:24px; cursor:pointer; }
-  .btn { width:100%; margin-top:16px; background:var(--pri); color:var(--on-pri); border:0; border-radius:14px; padding:15px; font-family:var(--serif); font-size:17px; font-weight:600; cursor:pointer; min-height:52px; }
+  .btn { width:100%; margin-top:14px; background:var(--pri); color:var(--on-pri); border:0; border-radius:14px; padding:15px; font-family:var(--serif); font-size:17px; font-weight:600; cursor:pointer; min-height:52px; }
   .btn[disabled] { opacity:.7; cursor:progress; }
-  .btn.sec { background:#fff; color:var(--pri); border:1.5px solid var(--pri); font-family:var(--sans); font-size:15px; }
-  .reportar { width:100%; margin-top:14px; background:#fff; border:1.5px solid #c9c1b0; border-radius:14px; padding:13px 14px; text-align:left; display:flex; gap:10px; align-items:center; cursor:pointer; font-size:15px; }
-  .reportar small { display:block; color:var(--ink-2); font-size:13px; }
-
-  .aca { margin-top:18px; border-top:1px solid var(--line); padding-top:14px; }
-  .aca h3 { font-size:13px; text-transform:uppercase; letter-spacing:.07em; color:var(--acc-txt); margin-bottom:8px; }
-  .aca li { list-style:none; display:flex; gap:10px; font-size:14px; line-height:1.45; padding:6px 0; }
-  .aca li svg { flex-shrink:0; margin-top:2px; }
-  .aca .mut { color:var(--ink-2); }
-
-  .codigo { text-align:center; margin:18px 0 6px; }
-  .codigo small { display:block; font-size:13px; color:var(--ink-2); }
-  .codigo b { display:inline-block; font-size:28px; letter-spacing:.08em; color:var(--pri); background:#fff; border:1.5px dashed var(--acc); border-radius:12px; padding:6px 16px; margin-top:4px; font-variant-numeric:tabular-nums; }
-  .nota { font-size:13.5px; color:var(--ink-2); text-align:center; line-height:1.5; margin-top:12px; }
-  .demo-nota { font-size:12.5px; color:#6b4a12; background:#fff8ea; border:1px solid #eedcb5; border-radius:10px; padding:8px 10px; margin-top:14px; line-height:1.45; }
-
-  /* Seguimiento */
-  .estado { display:inline-block; font-size:13px; font-weight:600; padding:3px 10px; border-radius:12px; }
-  .e-abierto { background:#e6eef7; color:#1f4f7a; } .e-res { background:#edf5e3; color:#3f7417; } .e-prog { background:#fdf1dc; color:#8a560a; } .e-reab { background:#fdeaea; color:#b42323; }
-  .tl { list-style:none; margin-top:14px; border-left:2px solid var(--line); padding-left:16px; }
-  .tl li { position:relative; padding:0 0 14px; font-size:14.5px; }
-  .tl li::before { content:""; position:absolute; left:-22px; top:5px; width:10px; height:10px; border-radius:50%; background:var(--pri-2); border:2px solid var(--bg); }
-  .tl li.res::before { background:#3f7417; }
-  .tl small { display:block; color:var(--ink-2); font-size:12.5px; }
-  .tl img { margin-top:6px; width:100%; max-width:220px; border-radius:10px; border:1px solid var(--line); }
-  .si-no { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
-  .si-no .btn { margin-top:0; font-size:15px; font-family:var(--sans); }
+  .enviado { display:flex; gap:10px; align-items:center; margin-top:16px; background:#e2f4ee; color:#0e5a44; border-radius:14px; padding:12px 14px; font-size:14.5px; }
+  .emerg { margin-top:16px; padding:10px 12px; border-left:4px solid #b42323; background:#fff; border-radius:8px; font-size:14.5px; color:#7a1d1d; font-weight:500; }
 
   footer { text-align:center; font-size:13px; color:var(--ink-2); padding:14px 16px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--line); line-height:1.5; }
   footer b { color:var(--ink); }
-  .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -130,80 +93,44 @@
     <div class="lugar"><span><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg><span class="lugarNombre"></span></span></div>
     <h1 id="q"></h1>
     <div class="rule"></div>
-    <p class="sub">Tocá una carita. Te lleva 5 segundos.</p>
+    <p class="sub" id="sub">Tocá una carita. Te lleva 5 segundos.</p>
     <div class="escala" id="escala" role="group" aria-labelledby="q"></div>
     <p class="msg" id="msgValorar" role="status"></p>
   </section>
 
-  <!-- 2 · Registrada + detalle opcional -->
+  <!-- 2 · Gracias + "¿Qué viste?" opcional -->
   <section id="sGracias" hidden>
-    <div class="ok" id="okBox">
+    <div class="ok">
       <span id="okCara"></span>
-      <div><div class="ok-t" id="okT">Opinión registrada</div><div class="ok-s" id="okS"></div></div>
-      <button class="link" id="cambiar" type="button">Cambiar</button>
+      <div><div class="ok-t" id="okT">¡Gracias! Tu opinión quedó registrada</div><div class="ok-s" id="okS"></div></div>
+      <button class="link" id="cambiar" type="button" aria-label="Cambiar mi opinión">Cambiar</button>
     </div>
 
-    <button class="reportar" id="abrirDetalle" type="button" hidden>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--pri-2)" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9L2 18a2 2 0 001.7 3h16.6a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
-      <span>¿Viste algún problema o peligro?<small>Podés reportarlo aunque el lugar esté bien.</small></span>
-    </button>
-
     <form class="detalle" id="detalle" hidden novalidate>
-      <h2 id="detT">¿Querés contarnos qué pasó?</h2>
-      <p class="lbl-sub">Es opcional. Tu opinión ya quedó registrada.</p>
-      <span class="lbl" id="lblCat">¿Qué problema viste?</span>
-      <p class="lbl-sub">Podés elegir varios.</p>
+      <h2 id="lblCat">¿Qué viste?</h2>
+      <p class="lbl-sub">Es opcional. Podés elegir varios.</p>
       <div class="chips" id="chips" role="group" aria-labelledby="lblCat"></div>
-
-      <button class="peligro" id="peligro" type="button" aria-pressed="false">
-        <span class="box" aria-hidden="true"></span>
-        <span><b>Es un peligro para las personas</b><span id="emerg"></span></span>
-      </button>
-
-      <label class="lbl" for="texto">Contanos más <span style="font-weight:400;color:var(--ink-2)">(opcional)</span></label>
-      <textarea id="texto" maxlength="500" placeholder="Ej.: los basureros están llenos desde el sábado"></textarea>
-      <div class="cont"><span id="cont">0</span>/500</div>
-
-      <div class="foto-row">
-        <label class="btn-foto" for="foto">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z"/><circle cx="12" cy="13" r="4"/></svg>
-          <span id="fotoTxt">Agregar foto (opcional)</span>
-        </label>
-        <input id="foto" class="sr" type="file" accept="image/*" capture="environment">
-        <div class="thumb" id="thumb" hidden><img id="thumbImg" alt="Foto adjunta"><button type="button" id="quitarFoto" aria-label="Quitar foto">×</button></div>
-      </div>
-      <p class="lbl-sub" style="margin-top:8px">Evitá que se vean caras o patentes.</p>
-
+      <label class="lbl" for="texto">Comentario <span style="font-weight:400;color:var(--ink-2)">(opcional)</span></label>
+      <textarea id="texto" maxlength="280" placeholder="Ej.: los basureros están llenos desde el sábado"></textarea>
+      <div class="cont" aria-live="polite"><span id="cont">0</span>/280</div>
       <p class="msg" id="msgDetalle" role="status"></p>
-      <button class="btn" id="enviarDetalle" type="submit">Enviar reporte</button>
-      <button class="link" id="noDetallar" type="button" style="display:block;margin:8px auto 0">Prefiero no detallar</button>
+      <button class="btn" id="enviar" type="submit">Enviar</button>
     </form>
+    <div class="enviado" id="enviado" hidden role="status">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#137a5d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+      <span>Listo, lo sumamos a tu opinión.</span>
+    </div>
+    <p class="emerg" id="emerg" hidden></p>
 
-    <div class="aca" id="aca"></div>
+    <p class="nota">La Municipalidad revisa estas opiniones todos los días.</p>
   </section>
 
-  <!-- 3 · Reporte recibido -->
-  <section id="sReporte" hidden>
-    <svg style="display:block;width:64px;height:64px;margin:8px auto 12px" viewBox="0 0 68 68" aria-hidden="true"><circle cx="34" cy="34" r="32" fill="#e2f4ee" stroke="#137a5d" stroke-width="2"/><path d="M21 35 L30 44 L47 25" fill="none" stroke="#137a5d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <h1>Reporte registrado</h1>
-    <div class="rule"></div>
-    <div class="codigo"><small>Tu código de seguimiento</small><b id="codigo"></b></div>
-    <p class="nota" id="compromiso"></p>
-    <p class="nota" id="agrupado" hidden></p>
-    <a class="btn sec" id="verCaso" href="#" style="display:block;text-align:center;text-decoration:none;margin-top:18px">Ver el estado del caso</a>
-    <p class="demo-nota"><b>Demo:</b> el reporte quedó guardado en este navegador. En producción lo recibe el servidor municipal y este código confirma la recepción.</p>
-    <button class="link" id="volver" type="button" style="display:block;margin:14px auto 0">Volver al inicio</button>
-  </section>
-
-  <!-- 4 · Seguimiento -->
-  <section id="sSeguir" hidden></section>
-
-  <!-- Código inválido -->
+  <!-- QR inválido -->
   <section id="sInvalido" hidden>
-    <h1>Este código no corresponde a un lugar activo</h1>
+    <h1>Este QR no corresponde a una plaza activa</h1>
     <div class="rule"></div>
     <p class="sub">Puede ser un cartel retirado o mal impreso. No registramos ninguna opinión.</p>
-    <p class="nota">Si querés avisar del cartel, escribinos a la Municipalidad. <span id="invId"></span></p>
+    <p class="nota" id="invId"></p>
   </section>
 </main>
 
@@ -213,39 +140,36 @@
 (function () {
   const C = Escucha.C, $ = id => document.getElementById(id);
   const params = new URLSearchParams(location.search);
-  const L = Escucha.lugar(params.get("p"));
-  const seguimiento = params.get("s");
+  const P = Escucha.plaza(params.get("p"));
 
   $("logo").src = "../" + C.logo; $("logo").alt = C.cliente;
   $("hProd").textContent = C.producto; $("hCli").textContent = C.cliente; $("fProd").textContent = C.producto;
   $("q").textContent = C.pregunta;
-  $("emerg").textContent = `Si es una emergencia, llamá al ${C.emergencia}.`;
-  $("compromiso").textContent = C.compromiso;
+  $("emerg").textContent = C.emergencia;
 
   function mostrar(id) {
-    ["sValorar", "sGracias", "sReporte", "sSeguir", "sInvalido"].forEach(s => $(s).hidden = s !== id);
+    ["sValorar", "sGracias", "sInvalido"].forEach(s => $(s).hidden = s !== id);
     window.scrollTo(0, 0);
-    const h = $(id).querySelector("h1, h2, .ok-t"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
+    const h = $(id).querySelector("h1, .ok-t"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
   }
 
-  if (seguimiento) { renderSeguimiento(seguimiento); return; }
-  if (!L) { $("invId").textContent = params.get("p") ? `Código leído: ${params.get("p")}` : ""; document.title = C.producto; mostrar("sInvalido"); return; }
+  // Código de plaza inválido: no se registra nada
+  if (!P) { $("invId").textContent = params.get("p") ? `Código leído: ${params.get("p")}` : ""; document.title = C.producto; mostrar("sInvalido"); return; }
 
-  document.title = C.producto + " · " + L.nombre;
-  document.querySelectorAll(".lugarNombre").forEach(e => e.textContent = L.nombre);
+  document.title = C.producto + " · " + P.nombre;
+  document.querySelectorAll(".lugarNombre").forEach(e => e.textContent = P.nombre);
 
   if (!Escucha.disponible()) {
     $("msgValorar").textContent = "Este navegador no permite guardar datos (modo privado). En la demo no se registrará tu opinión.";
     $("msgValorar").className = "msg err";
   }
 
-  // ---------- 1 · Caritas: las cuatro se guardan al tocar ----------
-  let valor = null, resultado = null, ocupado = false, foto = null;
+  // ---------- 1 · Caritas: las cuatro se guardan con un toque ----------
+  let valor = null, resultado = null, ocupado = false;
   C.escala.forEach(op => {
     const b = document.createElement("button");
-    b.type = "button"; b.className = "cara"; b.dataset.v = op.valor;
-    const col = Escucha.ESCALA_COLOR[op.valor];
-    b.style.setProperty("--sel", col.trazo);
+    b.type = "button"; b.className = "cara";
+    b.style.setProperty("--sel", Escucha.ESCALA_COLOR[op.valor].trazo);
     b.setAttribute("aria-label", op.etiqueta);
     b.innerHTML = Escucha.carita(op.valor) + `<span class="et" aria-hidden="true">${op.etiqueta}</span>`;
     b.addEventListener("click", () => valorar(op.valor, b));
@@ -256,7 +180,7 @@
   function valorar(v, boton) {
     if (ocupado) return;                       // evita doble toque
     ocupado = true; boton.setAttribute("aria-busy", "true");
-    const r = Escucha.guardarOpinion(L.id, v);
+    const r = Escucha.guardarOpinion(P.id, v);
     if (!r.ok) {
       ocupado = false; boton.removeAttribute("aria-busy");
       $("msgValorar").textContent = "No pudimos guardar tu opinión. Probá de nuevo.";
@@ -267,138 +191,46 @@
   }
 
   function renderGracias() {
-    const neg = valor <= C.umbralDetalle;
+    const neg = valor <= Escucha.NEG;
     $("okCara").innerHTML = Escucha.carita(valor);
-    $("okT").textContent = "Opinión registrada: " + Escucha.ETQ[valor];
-    $("okS").textContent = resultado.actualizada ? "Ya habías opinado hoy sobre este lugar: actualizamos tu opinión."
-      : !navigator.onLine ? "Sin conexión: quedó guardada en este teléfono." : "¡Gracias! Ya cuenta para " + L.nombre + ".";
-    resetDetalle();
-    $("detalle").hidden = !neg; $("abrirDetalle").hidden = neg;
-    $("detT").textContent = neg ? "¿Querés contarnos qué pasó?" : "Reportar un problema o peligro";
-    renderAca();
+    $("okS").textContent = resultado.actualizada ? `Ya habías opinado hoy en esta plaza: actualizamos tu opinión a “${Escucha.ETQ[valor]}”.`
+      : !navigator.onLine ? "Sin conexión: quedó guardada en este teléfono." : `Marcaste “${Escucha.ETQ[valor]}”.`;
+    [...$("chips").children].forEach(b => b.setAttribute("aria-pressed", "false"));
+    $("texto").value = ""; $("cont").textContent = "0";
+    $("msgDetalle").textContent = ""; $("msgDetalle").className = "msg";
+    $("enviar").disabled = false; $("enviar").textContent = "Enviar";
+    $("detalle").hidden = !neg; $("emerg").hidden = !neg; $("enviado").hidden = true;
     mostrar("sGracias");
   }
 
+  // Cambiar: se vuelve a las caritas; la nueva elección actualiza la misma opinión del día
   $("cambiar").addEventListener("click", () => {
-    if (resultado) Escucha.revertirOpinion(resultado);
-    resultado = null; valor = null; ocupado = false;
+    ocupado = false;
+    $("sub").textContent = `Marcaste “${Escucha.ETQ[valor]}”. Tocá otra carita para cambiarla.`;
     $("msgValorar").textContent = ""; $("msgValorar").className = "msg";
     mostrar("sValorar");
   });
-  $("abrirDetalle").addEventListener("click", () => { $("abrirDetalle").hidden = true; $("detalle").hidden = false; $("chips").querySelector(".chip").focus(); });
-  $("noDetallar").addEventListener("click", () => { $("detalle").hidden = true; $("abrirDetalle").hidden = false; });
 
-  // ---------- 2 · Detalle opcional ----------
-  Escucha.categoriasDe(L.id).forEach(c => {
+  // ---------- 2 · ¿Qué viste? (se agrega a la misma opinión) ----------
+  C.problemas.forEach(c => {
     const b = document.createElement("button");
-    b.type = "button"; b.className = "chip"; b.textContent = c; b.setAttribute("aria-pressed", "false");
-    b.addEventListener("click", () => b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"));
+    b.type = "button"; b.className = "chip"; b.dataset.c = c; b.textContent = c; b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => { b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); $("msgDetalle").textContent = ""; });
     $("chips").appendChild(b);
   });
-  $("peligro").addEventListener("click", e => { const b = e.currentTarget; b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); });
-  $("texto").addEventListener("input", e => $("cont").textContent = e.target.value.length);
-  $("detalle").addEventListener("click", () => { if ($("msgDetalle").className.includes("err")) { $("msgDetalle").textContent = ""; $("msgDetalle").className = "msg"; } }, true);
-  $("texto").addEventListener("input", () => { $("msgDetalle").textContent = ""; $("msgDetalle").className = "msg"; });
+  $("texto").addEventListener("input", e => { $("cont").textContent = e.target.value.length; $("msgDetalle").textContent = ""; });
 
-  $("foto").addEventListener("change", e => {
-    const f = e.target.files && e.target.files[0]; if (!f) return;
-    if (!/^image\//.test(f.type)) { $("msgDetalle").textContent = "El archivo no es una imagen."; return; }
-    const img = new Image(), url = URL.createObjectURL(f);
-    img.onload = () => {
-      // Se reduce y se re-dibuja: baja el peso y descarta los metadatos (ubicación, equipo)
-      const k = Math.min(1, 640 / Math.max(img.width, img.height));
-      const cv = document.createElement("canvas"); cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
-      cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
-      foto = cv.toDataURL("image/jpeg", 0.6); URL.revokeObjectURL(url);
-      $("thumbImg").src = foto; $("thumb").hidden = false; $("fotoTxt").textContent = "Cambiar foto";
-    };
-    img.onerror = () => { $("msgDetalle").textContent = "No pudimos leer la imagen."; URL.revokeObjectURL(url); };
-    img.src = url;
-  });
-  $("quitarFoto").addEventListener("click", () => { foto = null; $("thumb").hidden = true; $("foto").value = ""; $("fotoTxt").textContent = "Agregar foto (opcional)"; });
-
-  function resetDetalle() {
-    [...$("chips").children].forEach(b => b.setAttribute("aria-pressed", "false"));
-    $("peligro").setAttribute("aria-pressed", "false");
-    $("texto").value = ""; $("cont").textContent = "0"; $("quitarFoto").click();
-    $("msgDetalle").textContent = ""; $("enviarDetalle").disabled = false; $("enviarDetalle").textContent = "Enviar reporte";
-    reporteId = Escucha.uid();
-  }
-
-  let reporteId = Escucha.uid();   // clave estable: un reintento no duplica
   $("detalle").addEventListener("submit", e => {
     e.preventDefault();
-    const btn = $("enviarDetalle"); if (btn.disabled) return;
-    const cats = [...$("chips").children].filter(b => b.getAttribute("aria-pressed") === "true").map(b => b.textContent);
-    const texto = $("texto").value.trim(), peligro = $("peligro").getAttribute("aria-pressed") === "true";
-    if (!cats.length && !texto && !foto && !peligro) {
-      $("msgDetalle").textContent = "Elegí al menos un problema, escribí algo o agregá una foto."; $("msgDetalle").className = "msg err"; return;
-    }
+    const btn = $("enviar"); if (btn.disabled) return;
+    const cats = [...$("chips").children].filter(b => b.getAttribute("aria-pressed") === "true").map(b => b.dataset.c);
+    const texto = $("texto").value.trim();
+    if (!cats.length && !texto) { $("msgDetalle").textContent = "Elegí al menos una opción o escribí un comentario."; $("msgDetalle").className = "msg err"; return; }
     btn.disabled = true; btn.textContent = "Enviando…";
-    const r = Escucha.guardarReporte({ id: reporteId, p: L.id, opinionId: resultado && resultado.id, score: valor, cats, texto, foto, peligro });
-    if (!r.ok) { btn.disabled = false; btn.textContent = "Enviar reporte"; $("msgDetalle").textContent = "No pudimos guardar el reporte. Probá de nuevo."; $("msgDetalle").className = "msg err"; return; }
-    $("codigo").textContent = r.codigo;
-    $("verCaso").href = "?s=" + encodeURIComponent(r.codigo);
-    const caso = Escucha.casoPorCodigo(r.codigo);
-    const otros = caso ? caso.reportes.length - 1 : 0;
-    $("agrupado").hidden = !otros;
-    if (otros) $("agrupado").textContent = `Otros ${otros === 1 ? "vecino ya había" : otros + " vecinos ya habían"} reportado este problema: tu reporte se sumó al mismo caso.`;
-    if (r.sinFoto) $("agrupado").hidden = false, $("agrupado").textContent += " No se pudo guardar la foto en este navegador.";
-    mostrar("sReporte");
+    const r = Escucha.guardarDetalle(resultado.id, cats, texto);
+    if (!r.ok) { btn.disabled = false; btn.textContent = "Enviar"; $("msgDetalle").textContent = "No pudimos guardarlo. Probá de nuevo."; $("msgDetalle").className = "msg err"; return; }
+    $("detalle").hidden = true; $("enviado").hidden = false;
   });
-  $("volver").addEventListener("click", () => { resultado = null; valor = null; ocupado = false; mostrar("sValorar"); });
-
-  // ---------- Respuesta visible en el lugar ----------
-  function renderAca() {
-    const m = Escucha.modelo();
-    const casos = m.casos.filter(c => c.p === L.id);
-    const abiertos = casos.filter(c => c.abierto && !c.mio);
-    const resueltos = casos.filter(c => c.estado === "Resuelta").sort((a, b) => b.resueltaTs - a.resueltaTs).slice(0, 2);
-    if (!abiertos.length && !resueltos.length) { $("aca").innerHTML = ""; return; }
-    const ok = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3f7417" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>`;
-    const reloj = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--pri-2)" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`;
-    let h = `<h3>Lo que se está haciendo acá</h3><ul>`;
-    if (abiertos.length) {
-      const porCat = {}; abiertos.forEach(c => porCat[c.cat] = (porCat[c.cat] || 0) + 1);
-      h += `<li>${reloj}<span>${abiertos.length} ${abiertos.length === 1 ? "problema reconocido" : "problemas reconocidos"} en curso: ${Object.keys(porCat).map(Escucha.esc).join(", ").toLowerCase()}.</span></li>`;
-    }
-    resueltos.forEach(c => { h += `<li>${ok}<span>${Escucha.esc(c.nota)} <span class="mut">· ${Escucha.hace(c.resueltaTs)}</span></span></li>`; });
-    $("aca").innerHTML = h + `</ul>`;
-  }
-
-  // ---------- Seguimiento con código ----------
-  function renderSeguimiento(cod) {
-    const c = Escucha.casoPorCodigo(cod), E = Escucha.esc, s = $("sSeguir");
-    if (!c) {
-      s.innerHTML = `<h1>No encontramos ese código</h1><div class="rule"></div><p class="sub">Revisá que esté bien escrito: ${E(cod)}.</p><p class="demo-nota"><b>Demo:</b> solo se encuentran los códigos generados en este navegador.</p>`;
-      mostrar("sSeguir"); return;
-    }
-    const Lc = Escucha.lugar(c.p);
-    document.title = C.producto + " · Caso " + cod;
-    const cls = c.estado === "Resuelta" ? "e-res" : c.estado === "Programada" ? "e-prog" : c.estado === "Reabierta" ? "e-reab" : "e-abierto";
-    const etq = { "Nueva": "Recibido", "Reabierta": "Reabierto", "Asignada": "Asignado", "En proceso": "En proceso", "Programada": "Programado", "Resuelta": "Resuelto" };
-    let tl = `<li><b>Recibido</b><small>${Escucha.fecha(c.ts0, true)}${c.reportes.length > 1 ? ` · ${c.reportes.length} reportes de vecinos` : ""}</small></li>`;
-    c.eventos.forEach(ev => {
-      tl += `<li class="${ev.estado === "Resuelta" ? "res" : ""}"><b>${etq[ev.estado] || E(ev.estado)}</b>${ev.responsable ? " · " + E(ev.responsable) : ""}<small>${Escucha.fecha(ev.ts, true)}</small>${ev.nota && ev.estado !== "Asignada" ? `<div style="margin-top:2px">${E(ev.nota)}</div>` : ""}${ev.estado === "Programada" && ev.hasta ? `<small>Próxima actualización: ${Escucha.fecha(ev.hasta)}</small>` : ""}${ev.foto ? `<img src="${ev.foto}" alt="Foto del trabajo realizado">` : ""}</li>`;
-    });
-    if (c.estado === "Nueva" || c.estado === "Reabierta") tl += `<li><small>Plazo de primera respuesta: ${C.slaHoras} horas hábiles.</small></li>`;
-    s.innerHTML = `
-      <div class="lugar"><span>${E(Lc.nombre)}</span></div>
-      <h1>Caso ${E(cod)}</h1><div class="rule"></div>
-      <p style="text-align:center"><span class="estado ${cls}">${etq[c.estado] || E(c.estado)}</span> <span class="mut" style="color:var(--ink-2);font-size:14px">· ${E(c.cat)}</span></p>
-      <ul class="tl">${tl}</ul>
-      ${c.estado === "Resuelta" ? `<div class="detalle" style="margin-top:4px"><h2>¿Se solucionó?</h2><div class="si-no"><button class="btn sec" id="siOk" type="button">Sí</button><button class="btn" id="sigue" type="button">No, sigue igual</button></div><p class="msg" id="msgSeg" role="status"></p></div>` : ""}
-      <p class="demo-nota"><b>Demo:</b> el estado cambia cuando el operador actúa en el panel de este navegador. Recargá para ver novedades.</p>`;
-    mostrar("sSeguir");
-    if ($("siOk")) {
-      $("siOk").onclick = () => { $("msgSeg").textContent = "¡Gracias por confirmarlo!"; $("siOk").disabled = $("sigue").disabled = true; };
-      $("sigue").onclick = () => {
-        $("sigue").disabled = true;
-        const r = Escucha.guardarReporte({ id: "re-" + c.id + "-" + Date.now(), p: c.p, cats: [c.cat], reabre: c.id });
-        if (r.ok) renderSeguimiento(cod); else { $("sigue").disabled = false; $("msgSeg").textContent = "No pudimos registrarlo. Probá de nuevo."; }
-      };
-    }
-  }
 })();
 </script>
 </body>

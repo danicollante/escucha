@@ -18,118 +18,112 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:var(--sans); background:var(--bg); color:var(--ink); line-height:1.5; }
   :focus-visible { outline:3px solid var(--pri-2); outline-offset:2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
   .hero { background:var(--pri); color:var(--on-pri); }
   .hero-in { max-width:1000px; margin:0 auto; padding:40px 20px 44px; display:flex; gap:24px; align-items:center; }
   .hero img { height:110px; width:auto; background:#fff; border-radius:14px; padding:8px; flex-shrink:0; }
-  .kick { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--acc); font-weight:600; }
+  .kick { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#e8b467; font-weight:600; }
   h1 { font-family:var(--serif); font-weight:600; font-size:clamp(30px, 6vw, 46px); line-height:1.08; margin:6px 0 10px; }
-  .lead { font-size:17px; max-width:56ch; opacity:.92; }
-  main { max-width:1000px; margin:0 auto; padding:28px 20px 48px; }
+  .lead { font-size:17px; max-width:58ch; opacity:.95; }
+  main { max-width:1000px; margin:0 auto; padding:28px 20px 48px; display:grid; gap:16px; }
   .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px; display:flex; flex-direction:column; }
   .card h2 { font-family:var(--serif); font-weight:600; font-size:22px; color:var(--pri); margin-bottom:6px; }
   .card p { color:var(--ink-2); font-size:15px; }
   label { display:block; font-size:13px; font-weight:600; margin:16px 0 6px; }
-  select { width:100%; border:1.5px solid #cfc7b6; border-radius:10px; padding:10px; font:inherit; background:#fff; }
+  select { width:100%; border:1.5px solid #cfc7b6; border-radius:10px; padding:10px; font:inherit; background:#fff; min-height:44px; }
   .qr-row { display:flex; gap:16px; align-items:center; margin-top:16px; }
   #qr { background:#fff; padding:8px; border:1px solid var(--line); border-radius:10px; width:148px; height:148px; flex-shrink:0; }
   #qr img, #qr canvas { width:130px !important; height:130px !important; }
   .qr-note { font-size:13px; color:var(--ink-2); }
-  .btn { display:inline-flex; justify-content:center; align-items:center; gap:8px; background:var(--pri); color:var(--on-pri); text-decoration:none; border-radius:12px; padding:13px 18px; font-weight:600; margin-top:auto; }
-  .btn.sec { background:#fff; color:var(--pri); border:1.5px solid var(--pri); }
-  .acts { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
-  .pasos { margin-top:28px; background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px; }
-  .pasos h2 { font-family:var(--serif); font-weight:600; font-size:20px; color:var(--pri); margin-bottom:12px; }
-  .pasos ol { padding-left:20px; display:grid; gap:8px; font-size:15px; }
-  .regla { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
-  .regla div { border-radius:12px; padding:14px; font-size:14px; }
-  .regla b { display:block; font-family:var(--serif); font-size:17px; margin-bottom:2px; }
-  .neg { background:#fdeaea; color:#7a1d1d; } .pos { background:#e2f4ee; color:#0e5a44; }
+  .btn { display:inline-flex; justify-content:center; align-items:center; gap:8px; background:var(--pri); color:var(--on-pri); text-decoration:none; border-radius:12px; padding:13px 18px; font-weight:600; min-height:48px; }
+  .acts { display:flex; gap:10px; flex-wrap:wrap; margin-top:auto; padding-top:18px; }
+  .partes { margin-top:14px; padding-left:18px; display:grid; gap:8px; font-size:14.5px; color:var(--ink); }
+  .pasos ol { padding-left:22px; display:grid; gap:10px; font-size:15px; margin-top:6px; }
+  .pasos li::marker { font-family:var(--serif); font-weight:600; color:var(--acc-txt); }
+  .reglas ul { padding-left:20px; display:grid; gap:8px; font-size:15px; margin-top:6px; }
+  .reglas .clave { margin-top:14px; background:#e6eef7; color:#1f3f5f; border-radius:12px; padding:12px 14px; font-size:15px; }
+  .chico { margin-top:12px; font-size:13px; color:var(--ink-2); }
   footer { text-align:center; font-size:13px; color:var(--ink-2); padding:20px; border-top:1px solid var(--line); }
-  @media (max-width:760px) { .grid, .regla { grid-template-columns:1fr; } .hero-in { flex-direction:column; align-items:flex-start; padding-top:28px; } .hero img { height:84px; } }
+  @media (max-width:760px) { .grid { grid-template-columns:1fr; } .hero-in { flex-direction:column; align-items:flex-start; padding-top:28px; } .hero img { height:84px; } }
+  @media (max-width:420px) { .qr-row { flex-direction:column; align-items:flex-start; } }
 </style>
 </head>
 <body>
 <header class="hero"><div class="hero-in">
   <img id="logo" alt="">
   <div>
-    <div class="kick">Demo · Escucha ciudadana</div>
+    <div class="kick">Demo · Termómetro de plazas</div>
     <h1 id="prod"></h1>
-    <p class="lead">Un QR en cada espacio público. El vecino opina en 5 segundos, reporta lo que anda mal y puede comprobar qué hizo el municipio.</p>
+    <p class="lead">Un QR en cada plaza. El vecino opina en 5 segundos; la Municipalidad ve qué plaza necesita atención y avisa por WhatsApp a quien corresponde.</p>
   </div>
 </div></header>
 
 <main>
   <div class="grid">
     <section class="card">
-      <h2>1 · Lo que ve el vecino</h2>
-      <p>Esto es lo que abre el QR del tótem. Elegí un lugar y escaneá con el celular, o abrilo acá.</p>
-      <label for="lugar">Lugar</label>
-      <select id="lugar"></select>
+      <h2>Lo que ve el vecino</h2>
+      <p>Esto abre el QR del cartel. Elegí una plaza y escaneá con el celular, o abrilo acá.</p>
+      <label for="plaza">Plaza</label>
+      <select id="plaza"></select>
       <div class="qr-row">
-        <div id="qr" aria-label="Código QR del formulario"></div>
-        <p class="qr-note" id="qrNote">Cada lugar tiene su propio QR. Así el sistema sabe dónde se opinó sin preguntar.</p>
+        <div id="qr" role="img" aria-label="Código QR del formulario de la plaza elegida"></div>
+        <p class="qr-note" id="qrNote">Cada plaza tiene su propio QR. Así se sabe dónde se opinó sin preguntar.</p>
       </div>
       <div class="acts"><a class="btn" id="abrirForm" href="f/">Abrir formulario</a></div>
     </section>
 
     <section class="card">
-      <h2>2 · Lo que ve el municipio</h2>
-      <p>Qué atender hoy, casos con responsable y plazo, cierre con evidencia, mapa, satisfacción por lugar y control de calidad del dato.</p>
-      <div class="regla">
-        <div class="pos"><b>Las cuatro caritas</b>se registran con un toque, con el mismo esfuerzo.</div>
-        <div class="neg"><b>Si algo anda mal</b>el vecino puede contar qué pasó, marcar un peligro, sumar una foto y seguir el caso con un código.</div>
-      </div>
-      <div class="acts"><a class="btn" href="panel/">Abrir panel</a></div>
+      <h2>Lo que ve la Municipalidad</h2>
+      <p>La central: satisfacción por plaza, lo que hay que avisar hoy y un botón para mandarlo por WhatsApp al encargado que corresponde. Sin tickets ni estados.</p>
+      <ul class="partes">
+        <li><b>Lo principal</b> del día en una frase, con % de satisfacción y pendientes.</li>
+        <li><b>Para avisar hoy:</b> un toque arma el mensaje de WhatsApp para Juan, Rosa o Carlos.</li>
+        <li><b>Plazas:</b> mapa y lista; la que no recibe opiniones avisa que hay que verificar el cartel.</li>
+      </ul>
+      <div class="acts"><a class="btn" href="panel/">Abrir la central</a></div>
     </section>
   </div>
 
-  <section class="pasos">
-    <h2>Cómo probar la demo en vivo</h2>
+  <section class="card pasos">
+    <h2>Probala en 3 pasos</h2>
     <ol>
-      <li>Abrí el <b>panel</b> en una pestaña.</li>
-      <li>En otra pestaña del mismo navegador, abrí el <b>formulario</b>, tocá <b>Mal</b>, marcá un problema y enviá el reporte. Anotá el <b>código</b>.</li>
-      <li>En el panel aparece el aviso y el caso marcado como <b>Tu prueba</b> en <b>Atender hoy</b>. Asignalo, pasalo a en proceso y resolvelo escribiendo qué se hizo.</li>
-      <li>Volvé al formulario y tocá <b>Ver el estado del caso</b>: el vecino ve la respuesta. Si contesta “No, sigue igual”, el caso se reabre en el panel.</li>
-      <li>Para empezar de cero, usá <b>Borrar mis pruebas</b> en el panel.</li>
+      <li>En el <b>formulario</b>, tocá <b>Mal</b> y marcá <b>Sucio</b>. Si querés, escribí un comentario y enviá.</li>
+      <li>En la <b>central</b> (mismo navegador), tu opinión aparece en <b>Para avisar hoy</b>. Tocá <b>Avisar por WhatsApp</b>, elegí a Juan y abrí WhatsApp: la tarjeta queda <b>Avisado a Juan</b>.</li>
+      <li>Bajá a <b>Plazas</b> para ver el mapa y la lista, y mirá la tarjeta <b>Calidad del dato</b>: hay una ráfaga de ejemplo para admitir o descartar.</li>
     </ol>
-    <p style="margin-top:12px;font-size:13px;color:var(--ink-2)">En esta demo los datos viven en el navegador: el formulario y el panel deben abrirse en el mismo equipo. En producción, el formulario envía al servidor de Plugueo y el panel se actualiza desde cualquier dispositivo.</p>
+    <p class="chico">En esta demo los datos viven en el navegador: formulario y central deben abrirse en el mismo equipo. Para empezar de cero, usá <b>Borrar mis pruebas</b> en la central.</p>
   </section>
 
-  <section class="pasos">
-    <h2>Datos confiables, también en clave política</h2>
-    <ul style="padding-left:20px;display:grid;gap:8px;font-size:15px">
-      <li><b>Una opinión por dispositivo, lugar y día.</b> Si alguien vuelve a opinar, se actualiza en vez de sumarse.</li>
-      <li><b>Ráfagas a revisión.</b> Muchas opiniones en pocos minutos en un mismo lugar no se cuentan hasta que alguien las revisa, y la decisión queda registrada.</li>
-      <li><b>Mismas reglas para elogios y críticas.</b> Una mala nota o una crítica a la gestión nunca es motivo de exclusión.</li>
-      <li><b>Cada cambio deja rastro:</b> quién asignó, quién cerró, qué se hizo y cuándo.</li>
+  <section class="card reglas">
+    <h2>Por qué es difícil de manipular</h2>
+    <ul>
+      <li><b>Una opinión por dispositivo, plaza y día.</b> Volver a opinar actualiza la anterior, no suma otra.</li>
+      <li><b>Ráfagas a revisión.</b> Muchas opiniones en pocos minutos en una plaza no se cuentan hasta que el encargado decide.</li>
+      <li><b>Mismas reglas para elogios y críticas.</b> Una mala nota nunca es motivo de descarte.</li>
     </ul>
-    <p style="margin-top:12px;font-size:13px;color:var(--ink-2)">Ningún QR anónimo puede garantizar que cada opinión sea de una persona distinta. El sistema reduce y detecta el abuso, y muestra los límites del dato. En producción, estas reglas se aplican en el servidor, con límites de envío y verificación invisible ante actividad sospechosa.</p>
+    <p class="clave">Los comentarios solo los lee el encargado: no se publican, así que no sirven para amplificar trolls.</p>
   </section>
 </main>
 
-<footer>Datos y lugares de ejemplo · <span id="cli"></span> · con tecnología Plugueo</footer>
+<footer>Plazas y datos de ejemplo · <span id="cli"></span> · con tecnología Plugueo</footer>
 
 <script>
 (function () {
   const C = Escucha.C, $ = id => document.getElementById(id);
   $("logo").src = C.logo; $("logo").alt = C.cliente; $("prod").textContent = C.producto; $("cli").textContent = C.cliente;
   document.title = C.producto + " · Demo";
-  $("lugar").innerHTML = Object.entries(C.lugares).map(([id, l]) => `<option value="${id}">${l.nombre} · ${C.jerarquia.nivel} ${l.zona}</option>`).join("");
-  let qr = null;
+  $("plaza").innerHTML = Object.entries(C.plazas).map(([id, l]) => `<option value="${Escucha.esc(id)}">${Escucha.esc(l.nombre)}</option>`).join("");
   function actualizar() {
-    const rel = "f/?p=" + $("lugar").value;
+    const rel = "f/?p=" + encodeURIComponent($("plaza").value);
     $("abrirForm").href = rel;
     const url = new URL(rel, location.href).href;
     $("qr").innerHTML = "";
-    if (window.QRCode) {
-      qr = new QRCode($("qr"), { text: url, width: 260, height: 260, colorDark: C.colores.primario, colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
-    } else {
-      $("qr").textContent = "QR no disponible sin conexión";
-    }
+    if (window.QRCode) new QRCode($("qr"), { text: url, width: 260, height: 260, colorDark: C.colores.primario, colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+    else $("qr").textContent = "QR no disponible sin conexión";
     if (location.protocol === "file:") $("qrNote").textContent = "El QR funciona para escanear con el celular una vez que la demo está publicada (por ejemplo en GitHub Pages).";
   }
-  $("lugar").addEventListener("change", actualizar);
+  $("plaza").addEventListener("change", actualizar);
   actualizar();
 })();
 </script>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#123a5c">
-<title>Villeta Escucha · Panel</title>
+<title>Villeta Escucha · Central</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,7 +18,8 @@
     --pri:#123a5c; --pri-2:#1f5f8b; --on-pri:#f6ecd9; --acc:#c8862a; --acc-txt:#a8621a;
     --bg:#f6f1e7; --ink:#182532; --ink-2:#4d5a66; --ink-3:#5f6b77;
     --page:#f3f1ec; --card:#ffffff; --line:#e6e1d6; --soft:#f6f4ef;
-    --ok:#3f7417; --ok-bg:#edf5e3; --mid:#8a560a; --mid-bg:#fdf1dc; --bad:#b42323; --bad-bg:#fdeaea; --blue-bg:#e6eef7; --blue:#1f4f7a;
+    --ok:#3f7417; --ok-bg:#edf5e3; --mid:#8a560a; --mid-bg:#fdf1dc; --bad:#b42323; --bad-bg:#fdeaea;
+    --wa:#0b6b3a;
     --serif:'Fraunces', Georgia, serif;
     --sans:'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
@@ -28,35 +29,29 @@
   :focus-visible { outline:3px solid var(--pri-2); outline-offset:2px; }
   [tabindex="-1"]:focus { outline:none; }
   [hidden] { display:none !important; }
+  @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
+
+  .demo { background:#fff8ea; border-bottom:1px solid #eedcb5; position:sticky; top:0; z-index:1100; }
+  .demo-in { max-width:1180px; margin:0 auto; padding:7px 16px; display:flex; gap:6px 10px; align-items:center; flex-wrap:wrap; font-size:13px; color:#6b4a12; }
+  .demo-in b { color:#4f360c; }
+  .demo-in button { margin-left:auto; background:#fff; border:1px solid #c9a96a; border-radius:8px; padding:5px 10px; font-size:12.5px; cursor:pointer; color:#6b4a12; min-height:32px; }
 
   .top { background:var(--pri); color:var(--on-pri); }
   .top-in { max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:12px; }
   .escudo { background:#fff; border-radius:10px; padding:4px; display:flex; flex-shrink:0; }
   .escudo img { height:38px; width:auto; display:block; }
   .t-prod { font-family:var(--serif); font-weight:600; font-size:18px; line-height:1.1; }
-  .t-sub { font-size:12.5px; opacity:.9; }
-  .top select { margin-left:auto; background:rgba(255,255,255,.1); border:1px solid rgba(246,236,217,.45); color:var(--on-pri); border-radius:8px; padding:7px 10px; }
+  .t-sub { font-size:12.5px; opacity:.92; }
+  .top select { margin-left:auto; background:rgba(255,255,255,.1); border:1px solid rgba(246,236,217,.55); color:var(--on-pri); border-radius:8px; padding:7px 10px; min-height:38px; }
   .top select option { color:var(--ink); }
 
-  .demo { background:#fff8ea; border-bottom:1px solid #eedcb5; }
-  .demo-in { max-width:1180px; margin:0 auto; padding:8px 16px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:13px; color:#6b4a12; }
-  .demo-in b { color:#4f360c; }
-  .demo-in button { margin-left:auto; background:none; border:1px solid #d9bf86; border-radius:8px; padding:4px 10px; font-size:12.5px; cursor:pointer; color:#6b4a12; }
+  .wrap { max-width:1180px; margin:0 auto; padding:16px; display:grid; gap:14px; }
+  .h-sec { font-family:var(--serif); font-weight:600; font-size:20px; color:var(--pri); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .h-sec small { font-family:var(--sans); font-size:13px; font-weight:400; color:var(--ink-2); }
+  .count { background:var(--bad); color:#fff; font-family:var(--sans); font-size:12px; font-weight:600; border-radius:10px; padding:1px 8px; }
+  .count.cero { background:var(--ok); }
 
-  .tabs { background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:500; }
-  .tabs-in { max-width:1180px; margin:0 auto; padding:0 8px; display:flex; overflow-x:auto; scrollbar-width:none; }
-  .tab { background:none; border:0; border-bottom:3px solid transparent; padding:13px 14px 11px; font-size:14px; color:var(--ink-2); cursor:pointer; white-space:nowrap; display:flex; gap:6px; align-items:center; }
-  .tab[aria-selected="true"] { color:var(--pri); border-bottom-color:var(--pri); font-weight:600; }
-  .count { background:var(--bad); color:#fff; font-size:11.5px; font-weight:600; border-radius:10px; padding:1px 7px; }
-
-  .wrap { max-width:1180px; margin:0 auto; padding:16px; }
-  .filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
-  .filters select, .filters input { background:#fff; border:1px solid #d6cfbf; border-radius:8px; padding:8px 10px; font-size:13.5px; min-height:38px; }
-  .filters input { min-width:180px; }
-  .filters .n { font-size:13px; color:var(--ink-2); margin-left:auto; }
-  .alcance { font-size:13px; color:var(--ink-2); margin:-6px 0 12px; }
-
-  .kpis { display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:14px; }
+  .kpis { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
   .kpi { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
   .kpi-l { font-size:12.5px; color:var(--ink-2); font-weight:500; }
   .kpi-v { font-size:28px; font-weight:600; letter-spacing:-.01em; margin-top:2px; font-variant-numeric:tabular-nums; }
@@ -64,525 +59,381 @@
   .up { color:var(--ok); } .down { color:var(--bad); }
 
   .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
-  .card-h { display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
   .card-t { font-size:15px; font-weight:600; }
   .card-s { font-size:12.5px; color:var(--ink-2); }
-  .grid2 { display:grid; grid-template-columns:1.5fr 1fr; gap:14px; margin-bottom:14px; }
-  .stack { display:grid; gap:14px; align-content:start; }
 
-  .hallazgo { border-left:4px solid var(--acc); margin-bottom:14px; }
-  .hallazgo .pie { display:flex; gap:12px 16px; align-items:center; flex-wrap:wrap; margin-top:8px; }
-  .hallazgo .tag-auto { font-size:11.5px; font-weight:600; color:var(--acc-txt); text-transform:uppercase; letter-spacing:.06em; }
-  .hallazgo p { font-size:15px; line-height:1.55; max-width:80ch; }
-  .hallazgo .accion { font-size:14px; color:var(--ink-2); }
-  .hallazgo p { margin-top:4px; }
-  .hallazgo button { background:var(--pri); color:var(--on-pri); border:0; border-radius:8px; padding:9px 14px; font-weight:500; cursor:pointer; white-space:nowrap; }
+  .principal { border-left:4px solid var(--acc); }
+  .principal .tag { font-size:11.5px; font-weight:600; color:var(--acc-txt); text-transform:uppercase; letter-spacing:.06em; }
+  .principal p { font-size:16px; line-height:1.5; margin-top:4px; }
+  .principal ul { margin-top:6px; padding-left:18px; color:var(--ink-2); font-size:13.5px; }
 
-  #mapa { height:380px; border-radius:10px; overflow:hidden; background:#e9eef2; }
-  .leyenda { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; font-size:12.5px; color:var(--ink-2); }
+  .grid { display:grid; grid-template-columns:1.45fr 1fr; gap:14px; align-items:start; }
+  .col { display:grid; gap:12px; align-content:start; }
+
+  /* Tarjetas para avisar */
+  .tj { background:#fff; border:1px solid var(--line); border-left:4px solid var(--bad); border-radius:12px; padding:14px 16px; }
+  .tj.avisado { border-left-color:var(--ok); }
+  .tj-top { display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
+  .tj-t { font-weight:600; font-size:16px; }
+  .tj-dia { font-size:13px; color:var(--ink-2); }
+  .tj-h { font-size:12.5px; color:var(--ink-3); margin-left:auto; }
+  .caras { display:flex; gap:14px; margin-top:8px; flex-wrap:wrap; font-size:13.5px; }
+  .caras span { display:inline-flex; align-items:center; gap:6px; }
+  .caras svg { width:22px; height:22px; }
+  .probs { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .pr { font-size:12.5px; background:var(--soft); border:1px solid var(--line); padding:3px 9px; border-radius:10px; }
+  .pr b { font-variant-numeric:tabular-nums; }
+  .coms { margin-top:8px; display:grid; gap:4px; }
+  .coms q { display:block; font-size:14px; quotes:"“" "”"; }
+  .coms small { color:var(--ink-3); font-size:12px; }
+  .sin-com { font-size:13px; color:var(--ink-3); font-style:italic; margin-top:8px; }
+  .estado-av { margin-top:10px; font-size:13.5px; color:var(--ok); font-weight:600; display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .estado-av .nuevas { color:var(--mid); background:var(--mid-bg); border-radius:8px; padding:1px 8px; font-weight:600; font-size:12.5px; }
+  .mia { font-size:11.5px; font-weight:700; border-radius:8px; padding:2px 7px; text-transform:uppercase; letter-spacing:.04em; background:var(--acc-txt); color:#fff; }
+  .acts { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; padding-top:12px; border-top:1px solid var(--soft); }
+  .btn { background:var(--pri); color:var(--on-pri); border:0; border-radius:10px; padding:9px 14px; font-size:14px; font-weight:500; cursor:pointer; min-height:42px; display:inline-flex; align-items:center; gap:7px; text-decoration:none; }
+  .btn.wa { background:var(--wa); color:#fff; }
+  .btn.sec { background:#fff; color:var(--ink); border:1px solid #b9b09c; }
+  .btn.link { background:none; color:var(--pri-2); text-decoration:underline; padding:6px 4px; min-height:0; }
+  .vacio { text-align:center; padding:26px 16px; color:var(--ink-2); background:#fff; border-radius:12px; border:1px dashed #d6cfbf; }
+  details.desc { font-size:13.5px; color:var(--ink-2); }
+  details.desc summary { cursor:pointer; padding:6px 0; }
+  details.desc li { list-style:none; display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:6px 0; border-bottom:1px solid var(--soft); }
+
+  /* Plazas */
+  .plazas { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  #mapa { height:360px; border-radius:10px; overflow:hidden; background:#e9eef2; }
+  .leyenda { display:flex; gap:10px 14px; flex-wrap:wrap; margin-top:10px; font-size:12.5px; color:var(--ink-2); }
   .leyenda i { display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:5px; vertical-align:-1px; }
   .pop b { font-size:14px; } .pop div { font-size:12.5px; color:var(--ink-2); margin-top:2px; }
-  .pop button { margin-top:8px; background:var(--pri); color:var(--on-pri); border:0; border-radius:6px; padding:5px 10px; cursor:pointer; font-size:12.5px; }
+  .pl { padding:11px 0; border-bottom:1px solid var(--soft); display:grid; grid-template-columns:1fr auto; gap:2px 10px; }
+  .pl:last-child { border-bottom:0; }
+  .pl-n { font-weight:600; font-size:15px; }
+  .pl-r { grid-column:1 / -1; font-size:13px; color:var(--ink-2); display:flex; gap:4px 12px; flex-wrap:wrap; }
+  .pl.gris .pl-n { color:var(--ink-3); }
+  .pill { display:inline-block; font-size:13px; font-weight:600; padding:2px 9px; border-radius:12px; font-variant-numeric:tabular-nums; justify-self:end; align-self:start; }
+  .p-ok { background:var(--ok-bg); color:var(--ok); } .p-mid { background:var(--mid-bg); color:var(--mid); } .p-bad { background:var(--bad-bg); color:var(--bad); }
+  .p-sin { background:#eceff2; color:#3f4a55; font-weight:500; }
+  .chica { font-size:11.5px; font-weight:600; color:#5c4710; background:#fbf1d2; border-radius:8px; padding:1px 7px; }
 
-  .cat { margin-bottom:11px; }
-  .cat-top { display:flex; justify-content:space-between; font-size:13.5px; margin-bottom:4px; }
-  .cat-top b { font-weight:600; font-variant-numeric:tabular-nums; }
-  .cat-bar { height:8px; background:var(--soft); border-radius:4px; overflow:hidden; }
-  .cat-bar div { height:100%; background:var(--pri-2); border-radius:4px; }
-
-  .calidad .fila { display:flex; justify-content:space-between; font-size:13.5px; padding:5px 0; border-bottom:1px solid var(--soft); }
-  .calidad .fila b { font-variant-numeric:tabular-nums; }
+  /* Calidad del dato */
+  .fila { display:flex; justify-content:space-between; font-size:13.5px; padding:5px 0; border-bottom:1px solid var(--soft); }
+  .fila b { font-variant-numeric:tabular-nums; }
   .rafaga { margin-top:10px; background:#fff8ea; border:1px solid #eedcb5; border-radius:10px; padding:10px 12px; font-size:13.5px; }
-  .rafaga .acts { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+  .rafaga .acts { margin-top:8px; padding-top:0; border-top:0; }
   .reglas { margin-top:10px; font-size:12.5px; color:var(--ink-2); padding-left:16px; }
   .reglas li { margin:2px 0; }
-
-  .zonas { display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:14px; }
-  .zona { background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; text-align:left; cursor:pointer; }
-  .zona[aria-pressed="true"] { border-color:var(--pri); background:#f4f8fb; }
-  .zona .zn { font-weight:600; font-size:15px; }
-  .zona .zv { font-size:24px; font-weight:600; margin:4px 0 2px; font-variant-numeric:tabular-nums; }
-  .zona .zs { font-size:12.5px; color:var(--ink-2); }
-  .tbl { width:100%; border-collapse:collapse; }
-  .tbl th { text-align:left; font-size:12.5px; color:var(--ink-2); font-weight:500; padding:8px 6px; border-bottom:1px solid var(--line); }
-  .tbl td { padding:10px 6px; border-bottom:1px solid var(--soft); vertical-align:middle; }
-  .tbl-wrap { overflow-x:auto; }
-  .nm { font-weight:500; } .nm small { display:block; font-size:12.5px; color:var(--ink-3); font-weight:400; }
-  .pill { display:inline-block; font-size:12.5px; font-weight:600; padding:2px 9px; border-radius:12px; font-variant-numeric:tabular-nums; }
-  .p-ok { background:var(--ok-bg); color:var(--ok); } .p-mid { background:var(--mid-bg); color:var(--mid); } .p-bad { background:var(--bad-bg); color:var(--bad); }
-  .p-low { background:var(--soft); color:var(--ink-2); font-weight:500; }
-  .p-sin { background:#eceff2; color:#3f4a55; font-weight:500; }
-  .num { font-variant-numeric:tabular-nums; }
   .mut { color:var(--ink-3); }
 
-  .casos { display:grid; gap:10px; }
-  .caso { background:#fff; border:1px solid var(--line); border-left:4px solid var(--pri-2); border-radius:12px; padding:14px 16px; }
-  .caso.peligro { border-left-color:var(--bad); }
-  .caso.vencido { border-left-color:#b8730f; }
-  .caso.cerrado { border-left-color:#9aa5ae; }
-  .c-top { display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
-  .c-t { font-weight:600; font-size:15px; }
-  .c-time { font-size:12.5px; color:var(--ink-3); margin-left:auto; }
-  .c-body { display:flex; gap:12px; margin:8px 0 10px; }
-  .c-q { font-size:14px; line-height:1.5; }
-  .c-q.vacio { color:var(--ink-3); font-style:italic; }
-  .c-q small { display:block; color:var(--ink-3); font-size:12.5px; margin-top:3px; }
-  .c-foto { width:76px; height:76px; border-radius:8px; object-fit:cover; flex-shrink:0; border:1px solid var(--line); }
-  .c-meta { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
-  .tg { font-size:12.5px; background:var(--soft); color:var(--ink-2); padding:3px 9px; border-radius:10px; }
-  .st { font-size:12.5px; font-weight:600; padding:3px 9px; border-radius:10px; background:var(--blue-bg); color:var(--blue); }
-  .st.Nueva, .st.Reabierta { background:var(--bad-bg); color:var(--bad); } .st.Programada { background:var(--mid-bg); color:var(--mid); } .st.Resuelta { background:var(--ok-bg); color:var(--ok); }
-  .flag { font-size:11.5px; font-weight:700; border-radius:8px; padding:2px 7px; text-transform:uppercase; letter-spacing:.04em; }
-  .f-pel { background:var(--bad); color:#fff; } .f-ven { background:#8a560a; color:#fff; } .f-reab { background:#7a1d1d; color:#fff; } .f-mio { background:var(--acc-txt); color:#fff; }
-  .c-act { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; padding-top:10px; border-top:1px solid var(--soft); align-items:center; }
-  .c-act select { border:1px solid #d6cfbf; border-radius:8px; padding:7px 8px; font-size:13.5px; background:#fff; }
-  .btn { background:var(--pri); color:var(--on-pri); border:0; border-radius:8px; padding:8px 13px; font-size:13.5px; font-weight:500; cursor:pointer; }
-  .btn.sec { background:#fff; color:var(--ink); border:1px solid #c9c1b0; }
-  .btn.link { background:none; color:var(--pri-2); text-decoration:underline; padding:8px 4px; }
-  .form-cierre { width:100%; display:grid; gap:8px; margin-top:4px; }
-  .form-cierre textarea, .form-cierre input[type=date] { width:100%; border:1px solid #c9c1b0; border-radius:8px; padding:8px 10px; font-size:14px; min-height:40px; }
-  .form-cierre textarea { min-height:64px; resize:vertical; }
-  .form-cierre .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-  .form-cierre .err { color:var(--bad); font-size:13px; }
-  .hist { list-style:none; margin-top:10px; border-left:2px solid var(--line); padding-left:14px; font-size:13.5px; }
-  .hist li { margin-bottom:8px; position:relative; }
-  .hist li::before { content:""; position:absolute; left:-19px; top:6px; width:8px; height:8px; border-radius:50%; background:var(--pri-2); }
-  .hist small { color:var(--ink-3); }
-  .hist img { display:block; margin-top:4px; width:120px; border-radius:8px; border:1px solid var(--line); }
-  .vacio-lista { text-align:center; padding:30px; color:var(--ink-2); background:#fff; border-radius:12px; border:1px dashed var(--line); }
-  .pag { display:flex; justify-content:center; align-items:center; gap:12px; margin-top:14px; font-size:13.5px; color:var(--ink-2); }
+  /* Diálogo de WhatsApp */
+  dialog { border:0; border-radius:16px; padding:0; width:min(520px, calc(100% - 24px)); margin:auto; box-shadow:0 20px 60px rgba(0,0,0,.25); color:var(--ink); }
+  dialog::backdrop { background:rgba(18,30,42,.5); }
+  .dlg { padding:18px; display:grid; gap:10px; }
+  .dlg h2 { font-family:var(--serif); font-weight:600; font-size:20px; color:var(--pri); }
+  .dlg label { font-size:13.5px; font-weight:600; display:grid; gap:4px; }
+  .dlg select, .dlg textarea { width:100%; border:1.5px solid #c9c1b0; border-radius:10px; padding:10px; background:#fff; font-size:15px; font-weight:400; }
+  .dlg textarea { min-height:140px; resize:vertical; line-height:1.45; }
+  .dlg .nota { font-size:12.5px; color:var(--ink-2); }
+  .dlg .acts { border-top:0; padding-top:0; margin-top:4px; justify-content:flex-end; }
+  @media (max-width:640px) {
+    dialog { width:100%; max-width:100%; margin:auto 0 0; border-radius:16px 16px 0 0; }
+  }
 
-  .toast { position:fixed; right:16px; bottom:16px; background:var(--ink); color:#fff; padding:12px 16px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.2); font-size:14px; max-width:340px; z-index:1000; transform:translateY(20px); opacity:0; transition:all .25s; pointer-events:none; }
+  .toast { position:fixed; right:16px; bottom:16px; background:var(--ink); color:#fff; padding:12px 16px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.2); font-size:14px; max-width:340px; z-index:1200; transform:translateY(20px); opacity:0; transition:all .25s; pointer-events:none; }
   .toast.on { transform:none; opacity:1; }
 
-  @media (max-width:900px) { .grid2 { grid-template-columns:1fr; } .zonas { grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:900px) { .grid, .plazas { grid-template-columns:1fr; } }
   @media (max-width:640px) {
-    .kpis { grid-template-columns:repeat(2, 1fr); gap:8px; }
-    .kpi { padding:12px; } .kpi-v { font-size:23px; }
+    .kpis { gap:8px; }
+    .kpi { padding:10px; } .kpi-v { font-size:22px; } .kpi-l, .kpi-d { font-size:12px; }
     .t-sub { display:none; }
-    #mapa { height:300px; }
-    .tbl .hide-m { display:none; }
-    .filters input { min-width:0; flex:1 1 100%; }
+    #mapa { height:280px; }
+    .toast { left:16px; right:16px; max-width:none; }
+    .demo-in { font-size:12px; padding:6px 16px; flex-wrap:nowrap; }
+    .demo-in button { padding:4px 8px; font-size:12px; flex-shrink:0; }
   }
 </style>
 </head>
 <body>
 
-<div class="top"><div class="top-in">
-  <div class="escudo"><img id="logo" alt=""></div>
-  <div><div class="t-prod" id="tProd"></div><div class="t-sub" id="tSub"></div></div>
-  <select id="periodo" aria-label="Período de las opiniones">
-    <option value="7">Últimos 7 días</option>
-    <option value="28" selected>Últimos 28 días</option>
-  </select>
-</div></div>
-
 <div class="demo"><div class="demo-in">
-  <span><b>Demo con datos simulados.</b> Lugares, cifras y casos son de ejemplo. Lo que envíes desde el formulario en este navegador aparece acá en vivo.</span>
+  <span><b>Demo con datos simulados.</b> Lo que envíes desde el formulario en este navegador aparece acá.</span>
   <button id="borrar" type="button">Borrar mis pruebas</button>
 </div></div>
 
-<nav class="tabs"><div class="tabs-in" role="tablist" aria-label="Secciones">
-  <button class="tab" role="tab" id="t-resumen" aria-controls="v-resumen" aria-selected="true" data-v="resumen">Resumen</button>
-  <button class="tab" role="tab" id="t-hoy" aria-controls="v-hoy" aria-selected="false" data-v="hoy" tabindex="-1">Atender hoy <span class="count" id="cHoy">0</span></button>
-  <button class="tab" role="tab" id="t-lugares" aria-controls="v-lugares" aria-selected="false" data-v="lugares" tabindex="-1">Lugares</button>
-  <button class="tab" role="tab" id="t-historial" aria-controls="v-historial" aria-selected="false" data-v="historial" tabindex="-1">Historial</button>
-</div></nav>
+<div class="top"><div class="top-in">
+  <div class="escudo"><img id="logo" alt=""></div>
+  <div><div class="t-prod" id="tProd"></div><div class="t-sub" id="tSub"></div></div>
+  <select id="periodo" aria-label="Período">
+    <option value="7" selected>Últimos 7 días</option>
+    <option value="28">Últimos 28 días</option>
+  </select>
+</div></div>
 
-<div class="wrap">
+<main class="wrap">
+  <section aria-label="Resumen del período" class="col">
+    <div class="kpis" id="kpis"></div>
+    <div class="card principal" id="principal"></div>
+  </section>
 
-<!-- RESUMEN -->
-<section class="view" id="v-resumen" role="tabpanel" aria-labelledby="t-resumen">
-  <div class="filters"><select id="fZonaR" aria-label="Zona"></select></div>
-  <div class="kpis" id="kpis"></div>
-  <div class="card hallazgo" id="hallazgo"></div>
-  <div class="grid2">
-    <div class="card">
-      <div class="card-h"><span class="card-t">Mapa de lugares</span><span class="card-s">Color = satisfacción · tamaño = opiniones</span></div>
-      <div id="mapa" role="img" aria-label="Mapa de los lugares; la misma información está en la pestaña Lugares"></div>
-      <div class="leyenda">
-        <span><i style="background:#4f8a1f"></i>75% o más</span>
-        <span><i style="background:#d08a1c"></i>55 a 74%</span>
-        <span><i style="background:#c62f2f"></i>Menos de 55%</span>
-        <span><i style="background:#fff;border:2px dashed #6b7682"></i>Menos de 30 opiniones</span>
-        <span><i style="background:#9aa5ae"></i>Sin opiniones</span>
-        <span><i style="background:#fff;border:3px solid #b42323"></i>Peligro abierto</span>
-      </div>
-    </div>
-    <div class="stack">
-      <div class="card calidad" id="calidad"></div>
+  <div class="grid">
+    <section class="col" aria-labelledby="hAvisar">
+      <h2 class="h-sec" id="hAvisar">Para avisar hoy <span class="count" id="cPend">0</span> <small>Opiniones Muy mal y Mal de hoy y ayer, por plaza y día</small></h2>
+      <div class="col" id="avisar"></div>
+      <details class="desc" id="descartadas" hidden><summary></summary><ul></ul></details>
+    </section>
+    <section class="card" id="calidad" aria-label="Calidad del dato"></section>
+  </div>
+
+  <section class="col" aria-labelledby="hPlazas">
+    <h2 class="h-sec" id="hPlazas">Plazas <small>Cada plaza se compara con su propio período anterior</small></h2>
+    <div class="plazas">
       <div class="card">
-        <div class="card-h"><span class="card-t">Problemas más reportados</span></div>
-        <p class="card-s" style="margin:-6px 0 12px">% de reportes del período que mencionan cada problema (pueden marcar más de uno)</p>
-        <div id="cats"></div>
+        <div id="mapa" role="img" aria-label="Mapa de las plazas; la misma información está en la lista"></div>
+        <div class="leyenda">
+          <span><i style="background:#4f8a1f"></i>75% o más</span>
+          <span><i style="background:#d08a1c"></i>55 a 74%</span>
+          <span><i style="background:#c62f2f"></i>Menos de 55%</span>
+          <span><i style="background:#fff;border:2px dashed #6b7682"></i>Muestra chica</span>
+          <span><i style="background:#9aa5ae"></i>Sin opiniones</span>
+        </div>
       </div>
+      <div class="card" id="listaPlazas"></div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 
-<!-- ATENDER HOY -->
-<section class="view" id="v-hoy" role="tabpanel" aria-labelledby="t-hoy" hidden>
-  <p class="alcance">Todos los casos abiertos, sin importar el período. Primero peligros, vencidos (más de <span class="sla"></span> h sin respuesta o actualización prometida atrasada) y reabiertos; varios reportes del mismo problema se agrupan en un caso.</p>
-  <div class="filters">
-    <select id="fZonaH" aria-label="Zona"></select>
-    <select id="fEquipoH" aria-label="Equipo"></select>
-    <span class="n" id="nHoy"></span>
-  </div>
-  <div class="casos" id="hoy"></div>
-</section>
-
-<!-- LUGARES -->
-<section class="view" id="v-lugares" role="tabpanel" aria-labelledby="t-lugares" hidden>
-  <div class="zonas" id="zonas"></div>
-  <div class="card">
-    <div class="card-h"><span class="card-t" id="zTitulo"></span><span class="card-s">Cada lugar se compara con su propio período anterior: un mercado y una plaza no se miden igual.</span></div>
-    <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>Lugar</th><th>Satisfacción</th><th>vs. período anterior</th><th class="hide-m">Opiniones</th><th>Casos abiertos</th><th class="hide-m">Último resuelto</th></tr></thead>
-      <tbody id="zTabla"></tbody>
-    </table></div>
-  </div>
-</section>
-
-<!-- HISTORIAL -->
-<section class="view" id="v-historial" role="tabpanel" aria-labelledby="t-historial" hidden>
-  <div class="filters">
-    <input id="fBuscar" type="search" placeholder="Buscar código o texto" aria-label="Buscar">
-    <select id="fEstado" aria-label="Estado">
-      <option value="todos">Todos los estados</option><option value="abiertos">Abiertos</option><option value="Nueva">Nuevos</option>
-      <option value="Reabierta">Reabiertos</option><option value="Asignada">Asignados</option><option value="En proceso">En proceso</option>
-      <option value="Programada">Programados</option><option value="Resuelta">Resueltos</option>
-    </select>
-    <select id="fCat" aria-label="Problema"></select>
-    <select id="fZonaA" aria-label="Zona"></select>
-    <select id="fLugar" aria-label="Lugar"></select>
-    <select id="fDesde" aria-label="Creados">
-      <option value="0">Desde siempre</option><option value="7">Creados en los últimos 7 días</option><option value="28">Creados en los últimos 28 días</option>
-    </select>
-    <span class="n" id="aN"></span>
-  </div>
-  <div class="casos" id="historial"></div>
-  <div class="pag" id="pag"></div>
-</section>
-
-</div>
+<dialog id="dlg" aria-labelledby="dlgT">
+  <form class="dlg" method="dialog">
+    <h2 id="dlgT">Avisar por WhatsApp</h2>
+    <p class="card-s" id="dlgS"></p>
+    <label>¿A quién?<select id="dlgC"></select></label>
+    <p class="nota" id="dlgTel"></p>
+    <label>Mensaje<textarea id="dlgM" maxlength="1000"></textarea></label>
+    <p class="nota">Podés editar el mensaje antes de abrir WhatsApp.</p>
+    <div class="acts">
+      <button class="btn sec" value="cancel" type="submit">Cancelar</button>
+      <a class="btn wa" id="dlgWa" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
+    </div>
+  </form>
+</dialog>
 
 <div class="toast" id="toast" role="status"></div>
 
 <script>
 (function () {
-  const E = Escucha, C = E.C, J = C.jerarquia, esc = E.esc, fmt = E.fmt, DIA = E.DIA;
+  const E = Escucha, C = E.C, esc = E.esc, fmt = E.fmt, DIA = E.DIA, NEG = E.NEG;
   const $ = id => document.getElementById(id);
-  const ETQ = E.ETQ, POR_PAG = 20;
-  const EQUIPOS = [...new Set(Object.values(C.equipos))];
+  const WA = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 000-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 001.8-1.2 2.2 2.2 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg>`;
 
   $("logo").src = "../" + C.logo; $("logo").alt = C.cliente;
-  $("tProd").textContent = C.producto; $("tSub").textContent = "Panel de gestión · " + C.cliente;
-  document.querySelectorAll(".sla").forEach(e => e.textContent = C.slaHoras);
+  $("tProd").textContent = C.producto; $("tSub").textContent = "Central · " + C.cliente;
 
   let M = null;
   function construir() { M = E.modelo(); }
-
   const periodo = () => +$("periodo").value;
   function enVentana(ts, dias, desplazar) { const fin = Date.now() - (desplazar ? dias * DIA : 0); return ts <= fin && ts > fin - dias * DIA; }
   function stats(lista) {
-    const adm = lista.filter(o => o.estado === "admitida"), n = adm.length, sat = adm.filter(o => o.score > C.umbralDetalle).length;
-    return { n, pct: n ? Math.round(sat / n * 100) : null, rev: lista.filter(o => o.estado === "revision").length };
+    const adm = lista.filter(o => o.estado === "admitida"), n = adm.length, sat = adm.filter(o => o.score > NEG).length;
+    return { n, pct: n ? Math.round(sat / n * 100) : null, rev: lista.filter(o => o.estado === "revision").length, desc: lista.filter(o => o.estado === "descartada").length };
   }
-  function clasePct(pct, n) { if (!n) return "p-sin"; if (n < 30) return "p-low"; return pct >= 75 ? "p-ok" : pct >= 55 ? "p-mid" : "p-bad"; }
+  function clasePct(pct, n) { if (!n) return "p-sin"; return pct >= 75 ? "p-ok" : pct >= 55 ? "p-mid" : "p-bad"; }
   function colorPct(pct) { return pct >= 75 ? "#4f8a1f" : pct >= 55 ? "#d08a1c" : "#c62f2f"; }
-  function mediana(a) { if (!a.length) return null; const s = a.slice().sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
-  const zonaDe = p => C.lugares[p].zona;
+  const nombre = p => C.plazas[p].nombre;
+  const hoy0 = () => E.inicioDia(Date.now());
+  const enLista = t => t.diaTs >= hoy0() - DIA;   // hoy y ayer
+  function topCat(cats) { const e = Object.entries(cats).sort((a, b) => b[1] - a[1]); return e[0] || null; }
 
-  function llenar(sel, opciones, primera) {
-    const v = sel.value;
-    sel.innerHTML = (primera ? `<option value="">${primera}</option>` : "") + opciones.map(o => `<option value="${esc(o[0])}">${esc(o[1])}</option>`).join("");
-    if ([...sel.options].some(o => o.value === v)) sel.value = v;
+  // ================= Indicadores + Lo principal =================
+  function porPlaza(act, ant) {
+    return Object.keys(C.plazas).map(id => {
+      const a = stats(act.filter(o => o.p === id)), b = stats(ant.filter(o => o.p === id));
+      const cats = {}; act.filter(o => o.p === id && o.estado === "admitida" && o.score <= NEG).forEach(o => (o.cats || []).forEach(c => cats[c] = (cats[c] || 0) + 1));
+      const ultAviso = M.tarjetas.filter(t => t.p === id && t.estado === "avisado").map(t => t.decision).sort((x, y) => y.ts - x.ts)[0] || null;
+      return { id, P: C.plazas[id], ...a, tr: a.n >= 10 && b.n >= 10 ? a.pct - b.pct : null, top: topCat(cats), ultAviso };
+    });
   }
-  const opZonas = C.zonas.map(z => [z, J.nivel + " " + z]);
-  llenar($("fZonaR"), opZonas, J.ambito); llenar($("fZonaH"), opZonas, "Todas las zonas"); llenar($("fZonaA"), opZonas, "Todas las zonas");
-  llenar($("fEquipoH"), EQUIPOS.map(e => [e, e]), "Todos los equipos");
-  const todasCats = [...new Set([].concat(C.categorias, ...Object.values(C.lugares).map(l => l.categorias || []), ["Sin clasificar"]))];
-  llenar($("fCat"), todasCats.map(c => [c, c]), "Todos los problemas");
-  function llenarLugares() { const z = $("fZonaA").value; llenar($("fLugar"), Object.entries(C.lugares).filter(([, l]) => !z || l.zona === z).map(([id, l]) => [id, l.nombre]), "Todos los lugares"); }
-  llenarLugares();
 
-  // ================= RESUMEN =================
-  let mapa = null, capa = null;
-  function renderResumen() {
-    const z = $("fZonaR").value, dias = periodo();
-    const enZ = p => !z || zonaDe(p) === z;
-    const act = M.opiniones.filter(o => enZ(o.p) && enVentana(o.ts, dias));
-    const ant = M.opiniones.filter(o => enZ(o.p) && enVentana(o.ts, dias, true));
+  function renderResumen(filas, act, ant) {
     const s = stats(act), sa = stats(ant);
-    const casosZ = M.casos.filter(c => enZ(c.p));
-    const abiertos = casosZ.filter(c => c.abierto), venc = abiertos.filter(c => c.vencido).length, pel = abiertos.filter(c => c.peligro).length;
-    const resueltos = casosZ.filter(c => c.resueltaTs && enVentana(c.resueltaTs, dias));
-    const med = mediana(resueltos.map(c => (c.resueltaTs - c.ts0) / DIA));
+    const pend = M.tarjetas.filter(t => enLista(t) && t.estado === "pendiente");
     const dp = s.pct !== null && sa.pct !== null ? s.pct - sa.pct : 0;
     const dn = sa.n ? Math.round((s.n - sa.n) / sa.n * 100) : 0;
-    const delta = (v, suf) => v === 0 ? `<span>Sin cambios vs período anterior</span>` : `<span class="${v > 0 ? "up" : "down"}">${v > 0 ? "▲" : "▼"} ${Math.abs(v)}${suf}</span> vs período anterior`;
+    const delta = (v, suf) => v === 0 ? `Sin cambios vs. período anterior` : `<span class="${v > 0 ? "up" : "down"}">${v > 0 ? "▲" : "▼"} ${Math.abs(v)}${suf}</span> vs. período anterior`;
     $("kpis").innerHTML = `
       <div class="kpi"><div class="kpi-l">Satisfacción</div><div class="kpi-v">${s.pct ?? "–"}%</div><div class="kpi-d">${delta(dp, " pts")}</div></div>
-      <div class="kpi"><div class="kpi-l">Opiniones recibidas</div><div class="kpi-v">${fmt(s.n)}</div><div class="kpi-d">${s.rev ? `<b>${s.rev} en revisión</b>, no se cuentan` : delta(dn, "%")}</div></div>
-      <div class="kpi"><div class="kpi-l">Casos abiertos</div><div class="kpi-v" style="color:${abiertos.length ? "var(--bad)" : "inherit"}">${abiertos.length}</div><div class="kpi-d">${pel} peligro${pel === 1 ? "" : "s"} · ${venc} vencido${venc === 1 ? "" : "s"}</div></div>
-      <div class="kpi"><div class="kpi-l">Resueltos en el período</div><div class="kpi-v">${resueltos.length}</div><div class="kpi-d">${med === null ? "–" : "Mediana: " + (med < 1 ? Math.round(med * 24) + " h" : med.toFixed(1).replace(".", ",") + " días")}</div></div>`;
+      <div class="kpi"><div class="kpi-l">Opiniones recibidas</div><div class="kpi-v">${fmt(s.n)}</div><div class="kpi-d">${s.rev ? `${fmt(s.rev)} en revisión, no se cuentan` : delta(dn, "%")}</div></div>
+      <div class="kpi"><div class="kpi-l">Pendientes de avisar</div><div class="kpi-v" style="color:${pend.length ? "var(--bad)" : "var(--ok)"}">${pend.length}</div><div class="kpi-d">De hoy y ayer</div></div>`;
+    $("cPend").textContent = pend.length; $("cPend").classList.toggle("cero", !pend.length);
 
-    // Por lugar
-    const lugares = Object.keys(C.lugares).filter(enZ);
-    const filas = lugares.map(id => {
-      const a = stats(act.filter(o => o.p === id)), b = stats(ant.filter(o => o.p === id));
-      return { id, L: C.lugares[id], ...a, tr: a.n >= 10 && b.n >= 10 ? a.pct - b.pct : null, ab: abiertos.filter(c => c.p === id), pel: abiertos.some(c => c.p === id && c.peligro) };
-    });
+    // Lo principal: reglas simples y verificables
+    const frases = [];
+    const hoyP = pend.filter(t => t.diaTs === hoy0()).map(t => ({ t, c: topCat(t.cats) })).sort((a, b) => (b.c ? b.c[1] : 0) - (a.c ? a.c[1] : 0) || b.t.n - a.t.n)[0];
+    if (hoyP && hoyP.c && hoyP.c[1] >= 2) frases.push(`<b>${esc(nombre(hoyP.t.p))}:</b> ${hoyP.c[1]} vecinos marcaron <b>${esc(hoyP.c[0])}</b> hoy.`);
+    else if (hoyP && hoyP.t.n >= 2) frases.push(`<b>${esc(nombre(hoyP.t.p))}:</b> ${hoyP.t.n} opiniones negativas hoy, sin avisar todavía.`);
+    else if (pend.length) frases.push(`<b>${pend.length} ${pend.length === 1 ? "tarjeta pendiente" : "tarjetas pendientes"} de avisar</b> en "Para avisar hoy".`);
+    const caida = filas.filter(f => f.tr !== null && f.tr <= -5).sort((x, y) => x.tr - y.tr)[0];
+    if (caida) frases.push(`${esc(caida.P.nombre)} bajó ${Math.abs(caida.tr)} puntos vs. el período anterior${caida.top ? `; lo más marcado: ${esc(caida.top[0])}` : ""}.`);
+    filas.filter(f => !f.n).forEach(f => frases.push(`${esc(f.P.nombre)} no recibió opiniones: verificar el cartel.`));
+    const rev = M.grupos.filter(g => g.estado === "revision");
+    if (rev.length) frases.push(`${rev.reduce((a, g) => a + g.ops.length, 0)} opiniones en revisión por ráfaga en ${esc(nombre(rev[0].p))}.`);
+    if (!frases.length) frases.push(`Sin novedades para avisar. ${s.pct ?? "–"}% de satisfacción en el período.`);
+    $("principal").innerHTML = `<span class="tag">Lo principal</span><p>${frases[0]}</p>${frases.length > 1 ? `<ul>${frases.slice(1, 4).map(f => `<li>${f}</li>`).join("")}</ul>` : ""}`;
+  }
 
-    // Hallazgo principal + acción sugerida (reglas simples, verificables)
-    const caida = filas.filter(f => f.tr !== null && f.n >= 30).sort((x, y) => x.tr - y.tr)[0];
-    const sinDatos = filas.filter(f => f.n === 0);
-    let hallazgo = "", accion = "", boton = null;
-    if (pel) {
-      const c = abiertos.filter(x => x.peligro).sort((x, y) => y.prioridad - x.prioridad)[0];
-      hallazgo = `Hay <b>${pel} ${pel === 1 ? "peligro reportado" : "peligros reportados"}</b> sin resolver; el más antiguo en <b>${esc(C.lugares[c.p].nombre)}</b> (${esc(c.cat.toLowerCase())}, ${E.hace(c.ts0)}).`;
-      accion = "Acción sugerida: atender los peligros antes que cualquier otro caso."; boton = ["Ver peligros", "hoy"];
-    } else if (venc) {
-      hallazgo = `<b>${venc} ${venc === 1 ? "caso está vencido" : "casos están vencidos"}</b>: sin primera respuesta en ${C.slaHoras} h o con la actualización prometida atrasada.`;
-      accion = "Acción sugerida: asignarlos hoy."; boton = ["Asignar ahora", "hoy"];
-    }
-    if (caida && caida.tr <= -5) {
-      const neg = M.casos.filter(c => c.p === caida.id && enVentana(c.ts0, dias)), cuenta = {};
-      neg.forEach(c => cuenta[c.cat] = (cuenta[c.cat] || 0) + c.reportes.length);
-      const orden = Object.entries(cuenta).sort((x, y) => y[1] - x[1]);
-      const top = orden.find(x => x[0] !== "Otro" && x[0] !== "Sin clasificar") || null;
-      hallazgo += (hallazgo ? " " : "") + `La satisfacción en <b>${esc(caida.L.nombre)}</b> bajó ${Math.abs(caida.tr)} puntos respecto de su período anterior${top ? `, sobre todo por <b>${esc(top[0].toLowerCase())}</b>` : ""}.`;
-      if (!accion) { accion = "Acción sugerida: revisar ese lugar con el equipo responsable."; boton = ["Ver lugar", "lugar:" + caida.id]; }
-    }
-    if (sinDatos.length) hallazgo += ` ${sinDatos.length === 1 ? "Un lugar no recibió" : sinDatos.length + " lugares no recibieron"} opiniones (${sinDatos.map(f => esc(f.L.nombre)).join(", ")}): verificar el cartel o visitar.`;
-    if (!hallazgo) hallazgo = `Sin alertas destacadas: ${fmt(s.n)} opiniones y ${s.pct ?? "–"}% de satisfacción en el período.`;
-    $("hallazgo").innerHTML = `<span class="tag-auto">Lo principal</span><p>${hallazgo}</p>${accion || boton ? `<div class="pie">${boton ? `<button type="button" id="hBtn">${boton[0]}</button>` : ""}${accion ? `<span class="accion">${accion}</span>` : ""}</div>` : ""}`;
-    if (boton) $("hBtn").onclick = () => boton[1].startsWith("lugar:") ? verLugar(boton[1].slice(6)) : abrir("hoy");
+  // ================= Para avisar hoy =================
+  function renderAvisar() {
+    const lista = M.tarjetas.filter(t => enLista(t) && t.estado !== "descartado")
+      .sort((a, b) => (a.estado === "pendiente" ? 0 : 1) - (b.estado === "pendiente" ? 0 : 1) || b.tsUlt - a.tsUlt);
+    $("avisar").innerHTML = lista.length ? lista.map(t => {
+      const cats = Object.entries(t.cats).sort((a, b) => b[1] - a[1]);
+      const coms = t.comentarios.slice(0, 3);
+      const av = t.estado === "avisado" ? `<div class="estado-av"><span>✓ Avisado${t.decision.contacto ? " a " + esc(t.decision.contacto) : ""} · ${E.cuando(t.decision.ts) === "hoy" ? "" : E.cuando(t.decision.ts) + " "}${E.hora(t.decision.ts)}</span>${t.nuevas ? `<span class="nuevas">${t.nuevas} ${t.nuevas === 1 ? "nueva" : "nuevas"} desde el aviso</span>` : ""}</div>` : "";
+      return `<article class="tj ${t.estado}" data-id="${esc(t.id)}">
+        <div class="tj-top">${t.mia ? `<span class="mia">Tu prueba</span>` : ""}<span class="tj-t">${esc(nombre(t.p))}</span><span class="tj-dia">· ${E.cuando(t.tsUlt)}</span><span class="tj-h">último ${E.hora(t.tsUlt)}</span></div>
+        <div class="caras">${t.muyMal ? `<span>${E.carita(1)} ${t.muyMal} Muy mal</span>` : ""}${t.mal ? `<span>${E.carita(2)} ${t.mal} Mal</span>` : ""}</div>
+        ${cats.length ? `<div class="probs">${cats.map(([c, n]) => `<span class="pr">${esc(c)} <b>×${n}</b></span>`).join("")}</div>` : ""}
+        ${coms.length ? `<div class="coms">${coms.map(c => `<div><q>${esc(c.texto)}</q><small>${E.hora(c.ts)}</small></div>`).join("")}${t.comentarios.length > 3 ? `<small>y ${t.comentarios.length - 3} comentarios más</small>` : ""}</div>` : `<p class="sin-com">Sin comentarios escritos.</p>`}
+        ${av}
+        <div class="acts"><button class="btn wa" type="button" data-a="avisar">${WA}${t.estado === "avisado" ? "Avisar de nuevo" : "Avisar por WhatsApp"}</button><button class="btn sec" type="button" data-a="descartar" aria-label="Descartar ${esc(nombre(t.p))} ${E.cuando(t.tsUlt)}">Descartar</button></div>
+      </article>`;
+    }).join("") : `<div class="vacio">No hay opiniones negativas de hoy ni de ayer para avisar.</div>`;
+    $("avisar").querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", () => {
+      const t = M.tarjetas.find(x => x.id === b.closest(".tj").dataset.id);
+      if (b.dataset.a === "avisar") abrirAviso(t);
+      else { E.guardarAviso(t.id, { estado: "descartado" }); aviso(`Descartada: ${nombre(t.p)} · ${E.cuando(t.tsUlt)}`); construir(); refrescar(); }
+    }));
 
-    // Calidad del dato
-    const grupos = M.grupos.filter(g => enZ(g.p));
-    const pend = grupos.filter(g => g.estado === "revision");
-    $("calidad").innerHTML = `<div class="card-h"><span class="card-t">Calidad del dato</span><span class="card-s">Período seleccionado</span></div>
-      <div class="fila"><span>Opiniones admitidas</span><b>${fmt(s.n)}</b></div>
-      <div class="fila"><span>En revisión (no se cuentan)</span><b>${fmt(s.rev)}</b></div>
-      <div class="fila"><span>Excluidas con motivo</span><b>${fmt(act.filter(o => o.estado === "excluida").length)}</b></div>
-      ${grupos.slice(0, 2).map(g => `<div class="rafaga"><b>${g.ops.length} opiniones en ${Math.max(1, Math.round((g.fin - g.ini) / 6e4))} min</b> (${g.ops.filter(o => o.score === g.dominante).length} "${ETQ[g.dominante]}") · ${esc(C.lugares[g.p].nombre)} · ${E.fecha(g.ini, true)}
-        ${g.estado === "revision" ? `<div class="acts"><button class="btn sec" data-g="${esc(g.id)}" data-d="admitida">Admitir</button><button class="btn sec" data-g="${esc(g.id)}" data-d="excluida">Excluir</button></div>`
-          : `<div class="mut" style="margin-top:4px">${g.estado === "admitida" ? "Admitidas" : "Excluidas"} por ${esc(g.decision.actor)} · ${E.fecha(g.decision.ts, true)}${g.decision.motivo ? " · " + esc(g.decision.motivo) : ""}</div>`}</div>`).join("")}
-      <ul class="reglas"><li>Una opinión computable por dispositivo, lugar y día.</li><li>Ráfagas (${C.antiabuso.rafagaMinimo}+ en ${C.antiabuso.rafagaMinutos} min) pasan a revisión.</li><li>Las mismas reglas para elogios y críticas; cada decisión queda registrada.</li></ul>`;
-    $("calidad").querySelectorAll("[data-g]").forEach(b => b.onclick = () => {
-      const motivo = b.dataset.d === "excluida" ? "Patrón automatizado" : "Evento verificado";
-      E.decidirRevision(b.dataset.g, b.dataset.d, motivo); aviso(b.dataset.d === "admitida" ? "Opiniones admitidas" : "Opiniones excluidas"); construir(); refrescar();
-    });
+    const desc = M.tarjetas.filter(t => enLista(t) && t.estado === "descartado");
+    $("descartadas").hidden = !desc.length;
+    $("descartadas").querySelector("summary").textContent = `Descartadas de hoy y ayer (${desc.length})`;
+    $("descartadas").querySelector("ul").innerHTML = desc.map(t => `<li data-id="${esc(t.id)}"><span><b>${esc(nombre(t.p))}</b> · ${E.cuando(t.tsUlt)} · ${t.n} ${t.n === 1 ? "negativa" : "negativas"}</span><span class="mut">Descartada por ${esc(t.decision.actor)} · ${E.cuando(t.decision.ts)} ${E.hora(t.decision.ts)}</span><button class="btn link" type="button">Volver a la lista</button></li>`).join("");
+    $("descartadas").querySelectorAll("button").forEach(b => b.onclick = () => { E.guardarAviso(b.closest("li").dataset.id, { estado: "pendiente" }); construir(); refrescar(); });
+  }
 
-    // Problemas
-    const reps = M.casos.flatMap(c => c.reportes).filter(r => enZ(r.p) && enVentana(r.ts, dias) && !r.reabre);
-    const cuenta = {}; reps.forEach(r => (r.cats.length ? r.cats : ["Sin clasificar"]).forEach(c => cuenta[c] = (cuenta[c] || 0) + 1));
-    const top = Object.entries(cuenta).sort((a, b) => b[1] - a[1]);
-    $("cats").innerHTML = top.length ? top.map(([c, k]) => { const p = Math.round(k / reps.length * 100); return `<div class="cat"><div class="cat-top"><span>${esc(c)}</span><b>${p}%</b></div><div class="cat-bar"><div style="width:${p}%"></div></div></div>`; }).join("") : `<p class="card-s">Sin reportes en el período.</p>`;
+  // ================= Diálogo de WhatsApp =================
+  let actual = null, editado = false;
+  function contactoSel() { const i = $("dlgC").value; return i === "" ? null : C.agenda[+i]; }
+  function actualizarEnlace() {
+    const k = contactoSel();
+    $("dlgWa").href = E.enlaceWhatsApp(k && k.telefono, $("dlgM").value);
+    $("dlgTel").textContent = k && k.telefono ? `Se abre el chat con ${k.nombre} (+${k.telefono.replace(/\D/g, "")}).` : "Sin teléfono cargado: WhatsApp te pedirá elegir el contacto.";
+  }
+  function abrirAviso(t) {
+    actual = t; editado = false;
+    const sug = t.sugerido ? C.agenda.indexOf(t.sugerido) : -1;
+    $("dlgC").innerHTML = C.agenda.map((k, i) => `<option value="${i}">${esc(k.nombre)} · ${esc(k.rol)}</option>`).join("") + `<option value="">Otra persona (elegir en WhatsApp)</option>`;
+    $("dlgC").value = sug >= 0 ? String(sug) : "";
+    $("dlgS").textContent = `${nombre(t.p)} · ${E.cuando(t.tsUlt)} · ${t.n} ${t.n === 1 ? "opinión negativa" : "opiniones negativas"}`;
+    $("dlgM").value = E.mensaje(t, contactoSel());
+    actualizarEnlace();
+    $("dlg").showModal();
+  }
+  $("dlgC").addEventListener("change", () => {
+    if (!editado || confirm("¿Rearmar el mensaje para este contacto? Se pierden tus cambios.")) { $("dlgM").value = E.mensaje(actual, contactoSel()); editado = false; }
+    actualizarEnlace();
+  });
+  $("dlgM").addEventListener("input", () => { editado = true; actualizarEnlace(); });
+  $("dlgWa").addEventListener("click", () => {
+    actualizarEnlace();
+    const k = contactoSel();
+    E.guardarAviso(actual.id, { estado: "avisado", contacto: k ? k.nombre : "", rol: k ? k.rol : "", mensaje: $("dlgM").value });
+    $("dlg").close();
+    aviso(`Avisado${k ? " a " + k.nombre : ""} · ${nombre(actual.p)}`);
+    construir(); refrescar();
+  });
 
+  // ================= Plazas =================
+  let mapa = null, capa = null;
+  function renderPlazas(filas) {
+    $("listaPlazas").innerHTML = filas.map(f => {
+      const chica = f.n > 0 && f.n < 30;
+      const tr = f.tr === null ? `<span class="mut">sin comparación</span>` : f.tr === 0 ? "= vs. anterior" : `<span class="${f.tr > 0 ? "up" : "down"}">${f.tr > 0 ? "▲" : "▼"} ${Math.abs(f.tr)} pts</span> vs. anterior`;
+      return `<div class="pl ${f.n ? "" : "gris"}">
+        <span class="pl-n">${esc(f.P.nombre)} ${chica ? `<span class="chica">muestra chica</span>` : ""}</span>
+        <span class="pill ${clasePct(f.pct, f.n)}">${f.n ? f.pct + "%" : "Sin opiniones"}</span>
+        <div class="pl-r">${f.n ? `<span>${fmt(f.n)} opiniones</span><span>${tr}</span><span>Más marcado: ${f.top ? `${esc(f.top[0])} (${f.top[1]})` : "—"}</span>` : `<span>Verificar el cartel: no llegaron opiniones en el período.</span>`}
+          <span>Último aviso: ${f.ultAviso ? `${esc(f.ultAviso.contacto || "sin nombre")} · ${E.cuando(f.ultAviso.ts)} ${E.hora(f.ultAviso.ts)}` : "—"}</span></div>
+      </div>`;
+    }).join("");
     renderMapa(filas);
   }
 
   function renderMapa(filas) {
     const cont = $("mapa");
-    const radio = n => n ? Math.max(8, Math.min(22, 6 + Math.sqrt(n) * 1.3)) : 9;
+    const radio = n => n ? Math.max(9, Math.min(22, 6 + Math.sqrt(n) * 1.6)) : 9;
+    const estilo = f => { const chica = f.n > 0 && f.n < 30; return { chica, fill: !f.n ? "#9aa5ae" : chica ? "#ffffff" : colorPct(f.pct) }; };
     if (window.L) {
       if (!mapa) {
-        mapa = L.map(cont, { scrollWheelZoom: false }).setView(C.mapa.centro, C.mapa.zoom);
+        mapa = L.map(cont, { scrollWheelZoom: false });
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(mapa);
+        const pts = filas.map(f => [f.P.lat, f.P.lng]);
+        mapa.fitBounds(pts, { padding: [36, 36], maxZoom: 16 });
       }
       if (capa) capa.remove();
       capa = L.layerGroup().addTo(mapa);
       filas.forEach(f => {
-        const chica = f.n > 0 && f.n < 30;
-        if (f.pel) L.circleMarker([f.L.lat, f.L.lng], { radius: radio(f.n) + 6, color: "#b42323", weight: 3, fill: false, interactive: false }).addTo(capa);
-        const m = L.circleMarker([f.L.lat, f.L.lng], {
-          radius: radio(f.n), color: chica ? "#6b7682" : "#fff", weight: chica ? 2.5 : 2, dashArray: chica ? "4 3" : null,
-          fillColor: !f.n ? "#9aa5ae" : chica ? "#ffffff" : colorPct(f.pct), fillOpacity: .9
-        }).addTo(capa);
-        m.bindPopup(`<div class="pop"><b>${esc(f.L.nombre)}</b><div>${esc(f.L.tipo)} · ${J.nivel} ${esc(f.L.zona)}</div><div>${f.n ? `${f.pct}% satisfechos · ${f.n} opiniones${chica ? " (muestra chica)" : ""}` : "Sin opiniones en el período"}</div><div>${f.ab.length} casos abiertos${f.pel ? " · incluye peligro" : ""}</div><button>Ver lugar</button></div>`);
-        m.on("popupopen", e => { const b = e.popup.getElement().querySelector("button"); if (b) b.onclick = () => verLugar(f.id); });
+        const s = estilo(f);
+        L.circleMarker([f.P.lat, f.P.lng], { radius: radio(f.n), color: s.chica ? "#6b7682" : "#fff", weight: s.chica ? 2.5 : 2, dashArray: s.chica ? "4 3" : null, fillColor: s.fill, fillOpacity: .9 })
+          .addTo(capa).bindTooltip(f.P.nombre)
+          .bindPopup(`<div class="pop"><b>${esc(f.P.nombre)}</b><div>${f.n ? `${f.pct}% satisfechos · ${f.n} opiniones${s.chica ? " (muestra chica)" : ""}` : "Sin opiniones: verificar el cartel"}</div>${f.top ? `<div>Más marcado: ${esc(f.top[0])}</div>` : ""}</div>`);
       });
-      const pts = filas.map(f => [f.L.lat, f.L.lng]);
-      setTimeout(() => { mapa.invalidateSize(); if (pts.length) mapa.fitBounds(pts, { padding: [36, 36], maxZoom: 16 }); }, 60);
+      setTimeout(() => mapa.invalidateSize(), 60);
     } else {
-      const ps = filas.map(f => f.L), lat = ps.map(p => p.lat), lng = ps.map(p => p.lng);
+      const ps = filas.map(f => f.P), lat = ps.map(p => p.lat), lng = ps.map(p => p.lng);
       const [a, b, c, d] = [Math.min(...lat), Math.max(...lat), Math.min(...lng), Math.max(...lng)];
-      const X = v => 60 + (v - c) / (d - c || 1) * 480, Y = v => 40 + (b - v) / (b - a || 1) * 260;
+      const X = v => 70 + (v - c) / (d - c || 1) * 460, Y = v => 40 + (b - v) / (b - a || 1) * 260;
       cont.innerHTML = `<svg viewBox="0 0 600 350" width="100%" height="100%" style="background:#eef2f5"><text x="12" y="20" font-size="12" fill="#5f6b77">Vista esquemática (el mapa necesita conexión)</text>` +
-        filas.map(f => { const chica = f.n > 0 && f.n < 30, x = X(f.L.lng), y = Y(f.L.lat), r = radio(f.n);
-          return `<g>${f.pel ? `<circle cx="${x}" cy="${y}" r="${r + 6}" fill="none" stroke="#b42323" stroke-width="3"/>` : ""}<circle cx="${x}" cy="${y}" r="${r}" fill="${!f.n ? "#9aa5ae" : chica ? "#fff" : colorPct(f.pct)}" stroke="${chica ? "#6b7682" : "#fff"}" stroke-width="2" ${chica ? 'stroke-dasharray="4 3"' : ""}/><text x="${x}" y="${y + r + 16}" font-size="12" text-anchor="middle" fill="#182532">${esc(f.L.nombre)}</text></g>`; }).join("") + `</svg>`;
+        filas.map(f => { const s = estilo(f), x = X(f.P.lng), y = Y(f.P.lat), r = radio(f.n);
+          return `<g><circle cx="${x}" cy="${y}" r="${r}" fill="${s.fill}" stroke="${s.chica ? "#6b7682" : "#fff"}" stroke-width="2" ${s.chica ? 'stroke-dasharray="4 3"' : ""}/><text x="${x}" y="${y + r + 15}" font-size="12" text-anchor="middle" fill="#182532">${esc(f.P.nombre)}</text></g>`; }).join("") + `</svg>`;
     }
   }
 
-  // ================= CASOS (render compartido) =================
-  const abiertoForm = {};   // casoId -> "resolver" | "programar"
-  const verHist = {};
-  function renderCaso(c) {
-    const L = C.lugares[c.p];
-    const textos = c.textos.slice(-2).reverse();
-    const sugerido = c.responsable || C.equipos[c.cat] || "Intendencia";
-    const flags = (c.peligro && c.abierto ? `<span class="flag f-pel">Peligro</span>` : "") + (c.vencido ? `<span class="flag f-ven">Vencido</span>` : "") +
-      (c.reabierta ? `<span class="flag f-reab">Reabierto</span>` : "") + (c.mio ? `<span class="flag f-mio">Tu prueba</span>` : "");
-    let acc = "";
-    if (c.estado === "Nueva" || c.estado === "Reabierta") acc = `<select aria-label="Equipo responsable">${EQUIPOS.map(e => `<option ${e === sugerido ? "selected" : ""}>${esc(e)}</option>`).join("")}</select><button class="btn" data-a="asignar">Asignar</button>`;
-    else if (c.estado === "Asignada") acc = `<button class="btn" data-a="proceso">Marcar en proceso</button><button class="btn sec" data-a="f-resolver">Resolver</button>`;
-    else if (c.estado === "En proceso") acc = `<button class="btn" data-a="f-resolver">Resolver</button><button class="btn sec" data-a="f-programar">Programar</button>`;
-    else if (c.estado === "Programada") acc = `<button class="btn" data-a="proceso">Retomar</button><button class="btn sec" data-a="f-resolver">Resolver</button>`;
-    else if (c.estado === "Resuelta") acc = `<button class="btn sec" data-a="reabrir">Reabrir</button>`;
-    let form = "";
-    if (abiertoForm[c.id] === "resolver") form = `<div class="form-cierre"><label><b>¿Qué se hizo?</b> (obligatorio, lo verá el vecino)<textarea data-f="nota" maxlength="300" placeholder="Ej.: se reemplazaron 3 luminarias del sector de bancos"></textarea></label>
-        <div class="row"><label class="btn sec" style="cursor:pointer">Foto del trabajo (opcional)<input type="file" accept="image/*" data-f="foto" hidden></label><span class="mut" data-f="fotoOk"></span></div>
-        <div class="row"><button class="btn" data-a="resolver">Confirmar resolución</button><button class="btn link" data-a="cancelar">Cancelar</button><span class="err" data-f="err"></span></div></div>`;
-    if (abiertoForm[c.id] === "programar") form = `<div class="form-cierre"><label><b>Motivo</b> (lo verá el vecino)<textarea data-f="nota" maxlength="300" placeholder="Ej.: requiere compra de materiales"></textarea></label>
-        <label><b>Próxima actualización</b><input type="date" data-f="fecha"></label>
-        <div class="row"><button class="btn" data-a="programar">Guardar</button><button class="btn link" data-a="cancelar">Cancelar</button><span class="err" data-f="err"></span></div></div>`;
-    const hist = verHist[c.id] ? `<ul class="hist"><li><b>Recibido</b> · ${c.reportes.length} reporte${c.reportes.length === 1 ? "" : "s"}<br><small>${E.fecha(c.ts0, true)}</small></li>${c.eventos.map(ev =>
-      `<li><b>${esc(ev.estado)}</b>${ev.responsable ? " · " + esc(ev.responsable) : ""}${ev.nota && ev.estado !== "Asignada" ? " — " + esc(ev.nota) : ""}<br><small>${E.fecha(ev.ts, true)} · ${esc(ev.actor || "")}${ev.hasta ? " · próxima actualización " + E.fecha(ev.hasta) : ""}</small>${ev.foto ? `<img src="${ev.foto}" alt="Foto del trabajo">` : ""}</li>`).join("")}</ul>` : "";
-    return `<article class="caso ${c.peligro && c.abierto ? "peligro" : c.vencido ? "vencido" : c.abierto ? "" : "cerrado"}" data-id="${esc(c.id)}">
-      <div class="c-top">${flags}<span class="c-t">${esc(L.nombre)} · ${esc(c.cat)}</span><span class="c-time">${c.codigo} · abierto ${E.hace(c.ts0)}</span></div>
-      <div class="c-body">${c.foto ? `<img class="c-foto" src="${c.foto}" alt="Foto enviada por un vecino">` : ""}<p class="c-q ${textos.length ? "" : "vacio"}">${textos.length ? textos.map(t => "“" + esc(t) + "”").join("<br>") : "Sin comentario escrito."}${c.reportes.length > 1 ? `<small>${c.reportes.length} vecinos reportaron este problema · último ${E.hace(c.tsUlt)}</small>` : ""}</p></div>
-      <div class="c-meta"><span class="st ${esc(c.estado)}">${esc(c.estado)}</span>${c.responsable ? `<span class="tg">→ ${esc(c.responsable)}</span>` : ""}${c.programadaHasta ? `<span class="tg">${c.programadaHasta < Date.now() ? "Debía actualizar el" : "Actualiza"} ${E.fecha(c.programadaHasta)}</span>` : ""}${c.nota && c.estado === "Resuelta" ? `<span class="tg">✓ ${esc(c.nota)}</span>` : ""}<button class="btn link" data-a="hist">${verHist[c.id] ? "Ocultar historial" : "Historial"}</button></div>
-      ${hist}
-      <div class="c-act">${acc}${form}</div>
-    </article>`;
+  // ================= Calidad del dato =================
+  function renderCalidad(act) {
+    const s = stats(act), dias = periodo();
+    const grupos = M.grupos.filter(g => enVentana(g.ini, dias) || g.estado === "revision").slice(0, 2);
+    $("calidad").innerHTML = `<div class="card-t" style="margin-bottom:8px">Calidad del dato <span class="card-s">· período seleccionado</span></div>
+      <div class="fila"><span>Opiniones admitidas</span><b>${fmt(s.n)}</b></div>
+      <div class="fila"><span>En revisión (no se cuentan)</span><b>${fmt(s.rev)}</b></div>
+      <div class="fila"><span>Descartadas</span><b>${fmt(s.desc)}</b></div>
+      ${grupos.map(g => `<div class="rafaga"><b>Ráfaga: ${g.ops.length} opiniones en ${Math.max(1, Math.round((g.fin - g.ini) / E.MIN))} min</b> (${g.ops.filter(o => o.score === g.dominante).length} “${E.ETQ[g.dominante]}”) · ${esc(nombre(g.p))} · ${E.cuando(g.ini)} ${E.hora(g.ini)}
+        ${g.estado === "revision" ? `<div class="acts"><button class="btn sec" type="button" data-g="${esc(g.id)}" data-d="admitida">Admitir</button><button class="btn sec" type="button" data-g="${esc(g.id)}" data-d="descartada">Descartar</button></div>`
+          : `<div class="mut" style="margin-top:4px">${g.estado === "admitida" ? "Admitidas" : "Descartadas"} por ${esc(g.decision.actor)} · ${E.cuando(g.decision.ts)} ${E.hora(g.decision.ts)}</div>`}</div>`).join("")}
+      <ul class="reglas"><li>Una opinión por dispositivo, plaza y día.</li><li>Ráfagas (${C.antiabuso.rafagaMinimo} o más en ${C.antiabuso.rafagaMinutos} min) pasan a revisión.</li><li>Mismas reglas para elogios y críticas.</li></ul>`;
+    $("calidad").querySelectorAll("[data-g]").forEach(b => b.onclick = () => {
+      E.decidirRevision(b.dataset.g, b.dataset.d); aviso(b.dataset.d === "admitida" ? "Ráfaga admitida" : "Ráfaga descartada"); construir(); refrescar();
+    });
   }
 
-  function enlazarCasos(cont) {
-    cont.querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", () => {
-      const art = b.closest(".caso"), id = art.dataset.id, c = M.casos.find(x => x.id === id), a = b.dataset.a;
-      const err = t => { const e = art.querySelector('[data-f="err"]'); if (e) e.textContent = t; };
-      if (a === "hist") { verHist[id] = !verHist[id]; return refrescar(); }
-      if (a === "f-resolver" || a === "f-programar") { abiertoForm[id] = a.slice(2); refrescar(); const t = document.querySelector(`.caso[data-id="${CSS.escape(id)}"] textarea`); if (t) t.focus(); return; }
-      if (a === "cancelar") { delete abiertoForm[id]; return refrescar(); }
-      if (a === "asignar") { const eq = art.querySelector("select").value; E.guardarEvento(id, { estado: "Asignada", responsable: eq, nota: "Asignado a " + eq }); aviso(`${c.codigo} asignado a ${eq}`); }
-      if (a === "proceso") E.guardarEvento(id, { estado: "En proceso", responsable: c.responsable }), aviso(`${c.codigo} en proceso`);
-      if (a === "reabrir") E.guardarEvento(id, { estado: "Reabierta", nota: "Reabierto por el operador." }), aviso(`${c.codigo} reabierto`);
-      if (a === "resolver") {
-        const nota = art.querySelector('[data-f="nota"]').value.trim();
-        if (nota.length < 8) return err("Describí qué se hizo (al menos una frase).");
-        E.guardarEvento(id, { estado: "Resuelta", nota, foto: fotoCierre[id] || null, responsable: c.responsable });
-        delete abiertoForm[id]; delete fotoCierre[id]; aviso(`${c.codigo} resuelto`);
-      }
-      if (a === "programar") {
-        const nota = art.querySelector('[data-f="nota"]').value.trim(), f = art.querySelector('[data-f="fecha"]').value;
-        if (nota.length < 8) return err("Indicá el motivo."); if (!f) return err("Elegí la fecha de próxima actualización.");
-        E.guardarEvento(id, { estado: "Programada", nota, hasta: new Date(f + "T12:00").getTime(), responsable: c.responsable });
-        delete abiertoForm[id]; aviso(`${c.codigo} programado`);
-      }
-      construir(); refrescar();
-    }));
-    cont.querySelectorAll('input[data-f="foto"]').forEach(inp => inp.addEventListener("change", () => {
-      const art = inp.closest(".caso"), id = art.dataset.id, f = inp.files && inp.files[0]; if (!f) return;
-      const img = new Image(), url = URL.createObjectURL(f);
-      img.onload = () => { const k = Math.min(1, 640 / Math.max(img.width, img.height)), cv = document.createElement("canvas"); cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k); cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height); fotoCierre[id] = cv.toDataURL("image/jpeg", .6); URL.revokeObjectURL(url); art.querySelector('[data-f="fotoOk"]').textContent = "Foto lista ✓"; };
-      img.src = url;
-    }));
-  }
-  const fotoCierre = {};
-
-  // ================= ATENDER HOY =================
-  function renderHoy() {
-    const z = $("fZonaH").value, eq = $("fEquipoH").value;
-    const lista = M.casos.filter(c => c.abierto && (!z || zonaDe(c.p) === z) && (!eq || (c.responsable || C.equipos[c.cat]) === eq)).sort((a, b) => b.prioridad - a.prioridad);
-    $("nHoy").textContent = `${lista.length} ${lista.length === 1 ? "caso abierto" : "casos abiertos"}`;
-    $("hoy").innerHTML = lista.length ? lista.map(renderCaso).join("") : `<div class="vacio-lista">No hay casos abiertos con estos filtros.</div>`;
-    enlazarCasos($("hoy"));
-  }
-
-  // ================= LUGARES =================
-  let zonaSel = C.zonas[0];
-  function renderLugares() {
+  // ================= General =================
+  function refrescar() {
     const dias = periodo();
     const act = M.opiniones.filter(o => enVentana(o.ts, dias)), ant = M.opiniones.filter(o => enVentana(o.ts, dias, true));
-    $("zonas").innerHTML = C.zonas.map(z => {
-      const s = stats(act.filter(o => zonaDe(o.p) === z));
-      const n = Object.values(C.lugares).filter(l => l.zona === z).length;
-      const ab = M.casos.filter(c => c.abierto && zonaDe(c.p) === z).length;
-      return `<button class="zona" aria-pressed="${z === zonaSel}" data-z="${esc(z)}"><div class="zn">${esc(z)}</div><div class="zv" style="color:${s.pct === null ? "inherit" : colorPct(s.pct)}">${s.pct ?? "–"}%</div><div class="zs">${n} ${n === 1 ? J.punto.toLowerCase() : J.puntos.toLowerCase()} · ${fmt(s.n)} opiniones · ${ab} casos abiertos</div></button>`;
-    }).join("");
-    $("zonas").querySelectorAll(".zona").forEach(b => b.onclick = () => { zonaSel = b.dataset.z; renderLugares(); });
-    $("zTitulo").textContent = `${J.puntos} · ${J.nivel} ${zonaSel}`;
-    $("zTabla").innerHTML = Object.entries(C.lugares).filter(([, l]) => l.zona === zonaSel).map(([id, l]) => {
-      const s = stats(act.filter(o => o.p === id)), b = stats(ant.filter(o => o.p === id));
-      const tr = s.n >= 10 && b.n >= 10 ? s.pct - b.pct : null;
-      const ab = M.casos.filter(c => c.abierto && c.p === id);
-      const ult = M.casos.filter(c => c.p === id && c.estado === "Resuelta").sort((x, y) => y.resueltaTs - x.resueltaTs)[0];
-      return `<tr><td class="nm">${esc(l.nombre)}<small>${esc(l.tipo)}</small></td>
-        <td>${s.n ? `<span class="pill ${clasePct(s.pct, s.n)}">${s.pct}%</span>${s.n < 30 ? ` <small class="mut">muestra chica</small>` : ""}` : `<span class="pill p-sin">Sin opiniones</span>`}</td>
-        <td class="num ${tr === null ? "mut" : tr > 0 ? "up" : tr < 0 ? "down" : ""}">${tr === null ? "–" : tr === 0 ? "=" : (tr > 0 ? "▲ " : "▼ ") + Math.abs(tr) + " pts"}</td>
-        <td class="num hide-m">${s.n}</td>
-        <td>${ab.length ? `<button class="btn link" data-l="${id}">${ab.length}${ab.some(c => c.peligro) ? " · peligro" : ""}</button>` : '<span class="mut">—</span>'}</td>
-        <td class="hide-m mut">${ult ? esc(ult.nota) + " · " + E.hace(ult.resueltaTs) : s.n ? "—" : "Verificar cartel o visitar"}</td></tr>`;
-    }).join("");
-    $("zTabla").querySelectorAll("[data-l]").forEach(b => b.onclick = () => verCasosDe(b.dataset.l));
+    const filas = porPlaza(act, ant);
+    renderResumen(filas, act, ant); renderAvisar(); renderCalidad(act); renderPlazas(filas);
   }
-  function verLugar(id) { zonaSel = zonaDe(id); if (mapa) mapa.closePopup(); abrir("lugares"); }
-  function verCasosDe(id) { $("fEstado").value = "abiertos"; $("fZonaA").value = ""; llenarLugares(); $("fLugar").value = id; $("fCat").value = ""; $("fBuscar").value = ""; $("fDesde").value = "0"; pagina = 0; abrir("historial"); }
-
-  // ================= HISTORIAL =================
-  let pagina = 0;
-  function renderHistorial() {
-    const q = $("fBuscar").value.trim().toLowerCase(), fe = $("fEstado").value, fc = $("fCat").value, fz = $("fZonaA").value, fl = $("fLugar").value, fd = +$("fDesde").value;
-    const lista = M.casos.filter(c =>
-      (fe === "todos" || (fe === "abiertos" ? c.abierto : c.estado === fe)) && (!fc || c.cat === fc || c.reportes.some(r => r.cats.includes(fc))) &&
-      (!fz || zonaDe(c.p) === fz) && (!fl || c.p === fl) && (!fd || enVentana(c.ts0, fd)) &&
-      (!q || c.codigo.toLowerCase().includes(q) || c.reportes.some(r => r.codigo.toLowerCase().includes(q)) || c.textos.some(t => t.toLowerCase().includes(q)) || C.lugares[c.p].nombre.toLowerCase().includes(q))
-    ).sort((a, b) => b.ts0 - a.ts0);
-    const paginas = Math.max(1, Math.ceil(lista.length / POR_PAG)); if (pagina >= paginas) pagina = paginas - 1;
-    $("aN").textContent = `${lista.length} ${lista.length === 1 ? "caso" : "casos"}`;
-    $("historial").innerHTML = lista.length ? lista.slice(pagina * POR_PAG, (pagina + 1) * POR_PAG).map(renderCaso).join("") : `<div class="vacio-lista">No hay casos con estos filtros.</div>`;
-    $("pag").innerHTML = paginas > 1 ? `<button class="btn sec" id="pPrev" ${pagina ? "" : "disabled"}>Anterior</button><span>Página ${pagina + 1} de ${paginas}</span><button class="btn sec" id="pNext" ${pagina < paginas - 1 ? "" : "disabled"}>Siguiente</button>` : "";
-    if ($("pPrev")) { $("pPrev").onclick = () => { pagina--; renderHistorial(); window.scrollTo({ top: 0 }); }; $("pNext").onclick = () => { pagina++; renderHistorial(); window.scrollTo({ top: 0 }); }; }
-    enlazarCasos($("historial"));
-  }
-
-  // ================= Navegación =================
-  const tabs = [...document.querySelectorAll(".tab")];
-  function abrir(v) {
-    tabs.forEach(t => { const on = t.dataset.v === v; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; });
-    document.querySelectorAll(".view").forEach(s => s.hidden = s.id !== "v-" + v);
-    window.scrollTo({ top: 0 });
-    refrescar();
-  }
-  tabs.forEach((t, i) => {
-    t.addEventListener("click", () => abrir(t.dataset.v));
-    t.addEventListener("keydown", e => {
-      const k = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (!k) return;
-      const n = tabs[(i + k + tabs.length) % tabs.length]; n.focus(); abrir(n.dataset.v);
-    });
-  });
-  ["periodo", "fZonaR", "fZonaH", "fEquipoH"].forEach(id => $(id).addEventListener("change", refrescar));
-  ["fEstado", "fCat", "fLugar", "fDesde"].forEach(id => $(id).addEventListener("change", () => { pagina = 0; refrescar(); }));
-  $("fBuscar").addEventListener("input", () => { pagina = 0; refrescar(); });
-  $("fZonaA").addEventListener("change", () => { llenarLugares(); pagina = 0; refrescar(); });
-  $("borrar").addEventListener("click", () => { if (confirm("¿Borrar las opiniones, reportes y cambios de prueba de este navegador?")) { E.borrarDemo(); construir(); refrescar(); aviso("Pruebas borradas"); } });
-
-  function refrescar() {
-    $("cHoy").textContent = M.casos.filter(c => c.abierto).length;
-    const v = tabs.find(t => t.getAttribute("aria-selected") === "true").dataset.v;
-    if (v === "resumen") renderResumen(); else if (v === "hoy") renderHoy(); else if (v === "lugares") renderLugares(); else renderHistorial();
-  }
+  $("periodo").addEventListener("change", refrescar);
+  $("borrar").addEventListener("click", () => { if (confirm("¿Borrar las opiniones, avisos y decisiones de prueba de este navegador?")) { E.borrarDemo(); construir(); refrescar(); aviso("Pruebas borradas"); } });
 
   let tt = null;
   function aviso(t) { const el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("on"), 3200); }
 
   // ================= En vivo =================
-  function firma() { try { return [E.K.opiniones, E.K.reportes, E.K.eventos, E.K.revision].map(k => (localStorage.getItem(k) || "").length).join("."); } catch (e) { return ""; } }
+  function firma() { try { return Object.values(E.K).map(k => localStorage.getItem(k) || "").join("|"); } catch (e) { return ""; } }
   let ultima = firma();
-  function contar() { try { return [JSON.parse(localStorage.getItem(E.K.opiniones) || "[]"), JSON.parse(localStorage.getItem(E.K.reportes) || "[]")]; } catch (e) { return [[], []]; } }
-  let [opsAnt, repsAnt] = contar().map(a => a.length);
+  function mias() { try { return JSON.parse(localStorage.getItem(E.K.opiniones) || "[]"); } catch (e) { return []; } }
+  let previas = mias();
   function revisar() {
-    const f = firma(); if (f === ultima) return; ultima = f;
-    const [ops, reps] = contar();
-    if (reps.length > repsAnt) { const r = reps[reps.length - 1]; aviso(r.reabre ? `Un vecino reabrió un caso en ${C.lugares[r.p].nombre}` : `Nuevo reporte en ${C.lugares[r.p].nombre}${r.peligro ? " · PELIGRO" : ""}`); }
-    else if (ops.length > opsAnt) { const o = ops[ops.length - 1]; aviso(`Nueva opinión en ${C.lugares[o.p].nombre}: ${ETQ[o.score]}`); }
-    opsAnt = ops.length; repsAnt = reps.length;
+    const f = firma(); if (f === ultima || $("dlg").open) return; ultima = f;
+    const ops = mias(), cambio = ops.find(o => { const p = previas.find(x => x.id === o.id); return !p || p.ts !== o.ts || (p.cats || []).join() !== (o.cats || []).join() || p.texto !== o.texto; });
+    if (cambio) aviso(`${cambio.cats || cambio.texto ? "Detalle" : "Opinión"} en ${nombre(cambio.p)}: ${E.ETQ[cambio.score]}${cambio.cats && cambio.cats.length ? " · " + cambio.cats.join(", ") : ""}`);
+    previas = ops;
     construir(); refrescar();
   }
   window.addEventListener("storage", revisar);
-  setInterval(revisar, 2500);
+  setInterval(revisar, 2000);
+  $("dlg").addEventListener("close", revisar);
 
   construir(); refrescar();
 })();

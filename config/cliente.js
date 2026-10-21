@@ -2,8 +2,7 @@
  * Configuración del cliente — Escucha ciudadana (Plugueo)
  * ---------------------------------------------------------
  * Único archivo a editar para adaptar la demo a otro cliente: marca, colores,
- * jerarquía, lugares, categorías, equipos y textos.
- * LUGARES Y COORDENADAS SON DE EJEMPLO: validarlos con el municipio.
+ * plazas, problemas, agenda de la central y textos.
  */
 window.ESCUCHA_CONFIG = {
   id: "villeta",                       // separa los datos de cada municipio
@@ -23,57 +22,43 @@ window.ESCUCHA_CONFIG = {
     tintaSuave: "#4d5a66"
   },
 
-  jerarquia: { ambito: "Toda la ciudad", nivel: "Zona", niveles: "Zonas", punto: "Lugar", puntos: "Lugares" },
-
-  pregunta: "¿Cómo encontraste este lugar?",
+  pregunta: "¿Cómo encontraste la plaza?",
   escala: [
     { valor: 1, etiqueta: "Muy mal" },
     { valor: 2, etiqueta: "Mal" },
     { valor: 3, etiqueta: "Bien" },
     { valor: 4, etiqueta: "Muy bien" }
   ],
-  umbralDetalle: 2,      // de 1 a este valor se ofrece el detalle abierto
-  slaHoras: 48,          // plazo para la primera respuesta municipal
-  emergencia: "911",
-  compromiso: "El equipo municipal revisa los reportes y responde dentro de las 48 horas hábiles.",
+  umbralNegativo: 2,     // Muy mal y Mal ofrecen "¿Qué viste?" y llegan a "Para avisar hoy"
+  emergencia: "Si es una emergencia, llamá al 911.",
 
   // Antiabuso (en la demo se aplica en el navegador; en producción, en el servidor)
   antiabuso: {
-    unaPorLugarYDia: true,   // una opinión computable por dispositivo, lugar y día (se puede actualizar)
-    rafagaMinutos: 10,       // ventana para detectar ráfagas
-    rafagaMinimo: 15         // opiniones en la ventana que mandan el grupo a revisión
+    rafagaMinutos: 10,   // ventana para detectar ráfagas
+    rafagaMinimo: 15     // opiniones en la ventana que mandan el grupo a revisión
   },
 
-  categorias: ["Basura", "Iluminación", "Mobiliario dañado", "Seguridad", "Otro"],
+  problemas: ["Sucio", "Sin luz", "Algo roto", "Otro"],
 
-  // Equipo sugerido por problema
-  equipos: {
-    "Basura": "Cuadrilla de limpieza",
-    "Baños": "Mantenimiento de edificios",
-    "Iluminación": "Alumbrado público",
-    "Mobiliario dañado": "Obras y mantenimiento",
-    "Seguridad": "Seguridad ciudadana",
-    "Otro": "Intendencia",
-    "Sin clasificar": "Intendencia"
+  // PLAZAS DE EJEMPLO: nombres y coordenadas aproximadas, a validar con el municipio.
+  // El id se usa en el QR: f/?p=<id>
+  plazas: {
+    "plaza-central":    { nombre: "Plaza central",       lat: -25.5098, lng: -57.5596 },
+    "plaza-iglesia":    { nombre: "Plaza de la iglesia", lat: -25.5072, lng: -57.5578 },
+    "plaza-san-jose":   { nombre: "Plaza San José",      lat: -25.5134, lng: -57.5549 },
+    "plaza-barrio-sur": { nombre: "Plaza barrio Sur",    lat: -25.5183, lng: -57.5571 },
+    "plaza-norte":      { nombre: "Plaza barrio Norte",  lat: -25.4975, lng: -57.5603 }
   },
 
-  zonas: ["Centro", "Ribereña", "Norte", "Sur"],
+  // Agenda de la central. Teléfono en formato internacional, solo dígitos: 5959XXXXXXXX
+  // (595 = Paraguay, sin el 0 inicial del celular). Vacío: WhatsApp pide elegir el contacto.
+  // "problemas" es opcional: sugiere a quién avisar según lo que marcaron los vecinos.
+  agenda: [
+    { nombre: "Juan",   rol: "Limpieza",      telefono: "", problemas: ["Sucio"] },
+    { nombre: "Rosa",   rol: "Alumbrado",     telefono: "", problemas: ["Sin luz"] },
+    { nombre: "Carlos", rol: "Mantenimiento", telefono: "", problemas: ["Algo roto", "Otro"] }
+  ],
 
-  // id → usado en el QR: f/?p=<id>
-  lugares: {
-    "plaza-central":    { nombre: "Plaza central",       tipo: "Plaza",     zona: "Centro",   lat: -25.5098, lng: -57.5596 },
-    "plaza-iglesia":    { nombre: "Plaza de la iglesia", tipo: "Plaza",     zona: "Centro",   lat: -25.5072, lng: -57.5578 },
-    "costanera":        { nombre: "Costanera",           tipo: "Paseo",     zona: "Ribereña", lat: -25.5121, lng: -57.5638 },
-    "mirador":          { nombre: "Mirador del río",     tipo: "Paseo",     zona: "Ribereña", lat: -25.5046, lng: -57.5629 },
-    "mercado":          { nombre: "Mercado municipal",   tipo: "Mercado",   zona: "Centro",   lat: -25.5110, lng: -57.5562,
-                          categorias: ["Basura", "Baños", "Iluminación", "Seguridad", "Otro"] },
-    "terminal":         { nombre: "Terminal de ómnibus", tipo: "Terminal",  zona: "Norte",    lat: -25.5011, lng: -57.5541,
-                          categorias: ["Basura", "Baños", "Iluminación", "Seguridad", "Otro"] },
-    "polideportivo":    { nombre: "Polideportivo",       tipo: "Deporte",   zona: "Norte",    lat: -25.4987, lng: -57.5582 },
-    "cancha-norte":     { nombre: "Cancha barrio Norte", tipo: "Deporte",   zona: "Norte",    lat: -25.4962, lng: -57.5612 },
-    "plaza-barrio-sur": { nombre: "Plaza barrio Sur",    tipo: "Plaza",     zona: "Sur",      lat: -25.5183, lng: -57.5571 },
-    "parque-infantil":  { nombre: "Parque infantil",     tipo: "Infantil",  zona: "Sur",      lat: -25.5159, lng: -57.5530 }
-  },
-
-  mapa: { centro: [-25.5085, -57.5585], zoom: 15 }
+  // Mensaje de WhatsApp. Variables: {nombre} {plaza} {cuando} {resumen} {comentario} {producto}
+  mensaje: "Hola {nombre}, en {plaza} {cuando} {resumen}.{comentario} ¿Podés revisar? — {producto}"
 };

@@ -1,68 +1,71 @@
 # Villeta Escucha · Demo
 
-Prototipo de **escucha ciudadana por QR** de [Plugueo](https://plugueo.com), preparado para la Municipalidad de Villeta.
+Prototipo de **termómetro de plazas + central de WhatsApp** de [Plugueo](https://plugueo.com), preparado para la Municipalidad de Villeta.
 
-> Convertir experiencias cotidianas en prioridades municipales y en respuestas que el vecino pueda comprobar.
+> Un QR en cada plaza. El vecino opina en 5 segundos; la Municipalidad ve qué plaza necesita atención y avisa por WhatsApp a quien corresponde.
+
+La versión anterior (casos, asignaciones, estados y códigos de seguimiento) quedó guardada en la rama [`v3-casos`](https://github.com/danicollante/escucha/tree/v3-casos).
 
 ## Qué incluye
 
 | Ruta | Qué es |
 |---|---|
-| `index.html` | Portada de la demo: QR por lugar, cómo probarla y reglas de calidad del dato |
-| `f/?p=<lugar>` | Formulario que abre el QR del cartel |
-| `f/?s=<código>` | Seguimiento del caso para el vecino |
-| `panel/` | Panel de gestión: Resumen · Atender hoy · Lugares · Historial |
-| `config/cliente.js` | **Único archivo a editar** para adaptar a otro cliente |
+| `index.html` | Portada: QR por plaza, guion de demo y reglas de calidad del dato |
+| `f/?p=<plaza>` | Formulario que abre el QR del cartel |
+| `panel/` | La central: indicadores, "Para avisar hoy", plazas (mapa + lista) y calidad del dato |
+| `config/cliente.js` | **Único archivo a editar**: marca, plazas, problemas, agenda y mensaje de WhatsApp |
 | `assets/escucha.js` | Modelo de datos, reglas y datos de ejemplo |
-| `docs/` | Revisión UX, auditoría externa y registro de cambios |
 
-## Circuito
+## Cómo funciona
 
-**QR → valoración → detalle opcional → código de seguimiento → asignación → intervención documentada → el vecino comprueba el resultado.**
+**Vecino.** Escanea el QR, toca una de cuatro caritas (Muy mal, Mal, Bien, Muy bien) y listo: un toque guarda la opinión, con el mismo esfuerzo para las cuatro. Si eligió Muy mal o Mal, puede marcar qué vio (Sucio, Sin luz, Algo roto, Otro) y dejar un comentario de hasta 280 caracteres; eso se agrega a la misma opinión. No se piden datos personales ni se prometen plazos.
 
-- Las **cuatro caritas se registran con un toque**: mismo esfuerzo para elogiar y para criticar.
-- Una **opinión** alimenta la satisfacción. Un **reporte** (problema, peligro, comentario o foto) abre un **caso**. Una carita negativa sin detalle no crea tareas vacías; una positiva igual puede reportar un peligro.
-- Varios reportes del mismo problema en el mismo lugar se **agrupan en un caso**.
-- Cerrar un caso exige escribir **qué se hizo** (y opcionalmente una foto). Eso es lo que ve el vecino.
-- El vecino puede decir **"No, sigue igual"** y el caso se reabre.
-- "Programado" exige motivo y fecha de próxima actualización; si la fecha pasa, el caso figura como vencido.
+**Central.** El encargado abre el panel una o dos veces por día:
+
+1. **Indicadores del período** (7 o 28 días): % de satisfacción, opiniones recibidas y pendientes de avisar, más una frase "Lo principal" armada con reglas simples.
+2. **Para avisar hoy**: las opiniones negativas de hoy y ayer, agrupadas por plaza y día. Cada tarjeta tiene dos acciones:
+   - **Avisar por WhatsApp**: elige un contacto de la agenda, edita el mensaje ya armado y abre `https://wa.me/<teléfono>?text=…` (o `https://wa.me/?text=…` si el contacto no tiene teléfono). La tarjeta queda "Avisado a Juan · 14:32".
+   - **Descartar**: sale de la lista y queda registrado quién y cuándo.
+
+   Una tarjeta solo puede estar **pendiente, avisada o descartada**.
+3. **Plazas**: mapa (OpenStreetMap, con vista esquemática sin conexión) y lista con satisfacción, variación vs. su propio período anterior, problema más marcado y último aviso. Sin opiniones = gris, "verificar el cartel". Menos de 30 opiniones = "muestra chica".
+4. **Calidad del dato**: opiniones admitidas, en revisión y descartadas, con la ráfaga de ejemplo para Admitir o Descartar.
 
 ## Reglas de calidad del dato
 
-- Una opinión computable por dispositivo, lugar y día; volver a opinar la actualiza.
-- Ráfagas (15 o más opiniones en 10 minutos en un lugar) pasan a **revisión** y no se cuentan hasta que alguien decide; la decisión queda registrada.
+- Una opinión computable por dispositivo, plaza y día; volver a opinar la actualiza.
+- Ráfagas (15 o más opiniones en 10 minutos en una plaza) pasan a **revisión** y no se cuentan hasta que el encargado decide Admitir o Descartar.
 - Mismas reglas para elogios y críticas.
-- Bloqueo de doble toque y clave única por envío (un reintento no duplica).
-- Códigos de lugar inexistentes no registran nada.
+- Bloqueo de doble toque; un código de plaza inexistente no registra nada.
+- Los comentarios solo los lee el encargado: no se publican.
 
 **Límite honesto:** un QR anónimo no puede garantizar persona única ni presencia física. El sistema reduce y detecta el abuso y muestra los límites del dato.
 
-## Probar la demo
+## Guion de demo (3 pasos)
 
-1. Abrí `panel/` en una pestaña.
-2. En otra pestaña **del mismo navegador** abrí `f/?p=mercado`, tocá **Mal**, marcá un problema y enviá. Anotá el código.
-3. En el panel aparece el aviso y el caso marcado **Tu prueba** en **Atender hoy**. Asignalo, pasalo a en proceso y resolvelo escribiendo qué se hizo.
-4. En el formulario, **Ver el estado del caso** muestra la respuesta. "No, sigue igual" lo reabre.
-5. **Borrar mis pruebas** deja todo como al inicio.
+1. Abrí `f/?p=plaza-central`, tocá **Mal**, marcá **Sucio** y enviá (el comentario es opcional).
+2. En `panel/` (mismo navegador), la opinión aparece en vivo en **Para avisar hoy**. Tocá **Avisar por WhatsApp**, elegí a Juan y abrí WhatsApp: la tarjeta pasa a **Avisado a Juan**.
+3. Bajá a **Plazas** para ver el mapa y la lista, y en **Calidad del dato** admití o descartá la ráfaga de ejemplo.
 
-## Qué hace la demo y qué no
+**Borrar mis pruebas** (arriba en la central) deja todo como al inicio.
 
-| Funciona en la demo | Requiere el servidor para el piloto |
+## Qué queda para un piloto real
+
+| Funciona en la demo | Requiere trabajo para el piloto |
 |---|---|
-| Formulario, detalle, foto, código y seguimiento | Recepción confirmada por el servidor y envío entre dispositivos (celular → otra computadora) |
-| Agrupación de reportes, estados, cierre con evidencia, reapertura | Cuentas individuales, roles y permisos por municipio |
-| Reglas de una opinión por día y detección de ráfagas (en el navegador) | Las mismas reglas aplicadas en el servidor, límites de envío y verificación invisible ante actividad sospechosa |
-| Panel con datos simulados coherentes entre sí | Datos reales, exportación, respaldo y continuidad entre administraciones |
-| Mapa (OpenStreetMap) | Lugares y coordenadas validados con el municipio |
+| Formulario, detalle y actualización en vivo (mismo navegador) | **Servidor** que confirme cada envío y lo muestre en la central desde cualquier dispositivo |
+| Reglas de una opinión por día y detección de ráfagas (en el navegador) | Las mismas reglas **aplicadas en el servidor**, con límites de envío y verificación invisible ante actividad sospechosa |
+| Central con datos simulados coherentes | **Cuenta del encargado** (acceso con usuario) y registro real de quién avisó o descartó |
+| Avisos por enlace `wa.me` | Teléfonos reales en la agenda (formato `5959XXXXXXXX`) |
+| Mapa con plazas de ejemplo | **Validar plazas y coordenadas reales** con el municipio e imprimir los carteles |
 
-Lugares, coordenadas, cifras y casos son **de ejemplo**.
+Plazas, coordenadas, cifras y contactos son **de ejemplo**.
 
 ## Publicar en GitHub Pages
 
-1. Subí el contenido de esta carpeta a un repositorio (por ejemplo `escucha`).
-2. *Settings → Pages → Branch: main / root → Save*.
-3. Queda en `https://<usuario>.github.io/escucha/`. Los QR de la portada apuntan ahí.
+1. *Settings → Pages → Branch: main / root → Save*.
+2. Queda en `https://<usuario>.github.io/escucha/`. Los QR de la portada apuntan ahí.
 
 ## Adaptar a otro cliente
 
-Editá `config/cliente.js`: id, nombre, escudo, colores, jerarquía, lugares (con tipo y coordenadas), categorías, equipos, plazo de respuesta y reglas antiabuso.
+Editá `config/cliente.js`: id, nombre, escudo, colores, plazas (con coordenadas), problemas, agenda de la central, plantilla del mensaje de WhatsApp, texto de emergencia y reglas antiabuso.

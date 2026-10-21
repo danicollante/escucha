@@ -1,18 +1,20 @@
 /*
  * Núcleo compartido — Escucha ciudadana (Plugueo)
  * -------------------------------------------------
+ * Termómetro de plazas + central de WhatsApp.
  * MODO DEMO: los datos de ejemplo se generan en el navegador y lo que se envía
  * desde el formulario se guarda en localStorage. En producción, guardarOpinion,
- * guardarReporte, guardarEvento y decidirRevision llaman a la API, que repite
+ * guardarDetalle, guardarAviso y decidirRevision llaman a la API, que repite
  * todas las validaciones y reglas antiabuso del lado del servidor.
  */
 (function () {
   const C = window.ESCUCHA_CONFIG;
   const PRE = "escucha." + (C.id || "demo") + ".";
-  const K = { opiniones: PRE + "opiniones", reportes: PRE + "reportes", eventos: PRE + "eventos", revision: PRE + "revision" };
+  const K = { opiniones: PRE + "opiniones", avisos: PRE + "avisos", revision: PRE + "revision" };
   const H = 36e5, DIA = 864e5, MIN = 6e4;
   const ETQ = Object.fromEntries(C.escala.map(e => [e.valor, e.etiqueta]));
-  const ABIERTOS = ["Nueva", "Reabierta", "Asignada", "En proceso", "Programada"];
+  const NEG = C.umbralNegativo;
+  const ACTOR = "Encargado (demo)";
 
   // ---------- Almacenamiento ----------
   function leer(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
@@ -45,182 +47,146 @@
 
   // ---------- Utilidades ----------
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
-  function codigoDe(id) {
-    let h = 2166136261; for (let i = 0; i < id.length; i++) { h ^= id.charCodeAt(i); h = Math.imul(h, 16777619); }
-    const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s = ""; h >>>= 0;
-    for (let i = 0; i < 5; i++) { s += A[h % 32]; h = Math.floor(h / 32); }
-    return (C.id || "ES").slice(0, 2).toUpperCase() + "-" + s;
-  }
-  function diaDe(ts) { const d = new Date(ts); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); }
-  function lugar(id) { return id && Object.prototype.hasOwnProperty.call(C.lugares, id) ? Object.assign({ id }, C.lugares[id]) : null; }
-  function categoriasDe(p) { return (C.lugares[p] && C.lugares[p].categorias) || C.categorias; }
+  const dos = n => String(n).padStart(2, "0");
+  function diaDe(ts) { const d = new Date(ts); return d.getFullYear() + "-" + dos(d.getMonth() + 1) + "-" + dos(d.getDate()); }
+  function inicioDia(ts) { const d = new Date(ts); d.setHours(0, 0, 0, 0); return d.getTime(); }
+  function plaza(id) { return id && Object.prototype.hasOwnProperty.call(C.plazas, id) ? Object.assign({ id }, C.plazas[id]) : null; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
   function fmt(n) { return Number(n).toLocaleString("es-PY"); }
+  function hora(ts) { const d = new Date(ts); return dos(d.getHours()) + ":" + dos(d.getMinutes()); }
+  function cuando(ts) {
+    const d = Math.round((inicioDia(Date.now()) - inicioDia(ts)) / DIA);
+    if (d === 0) return "hoy"; if (d === 1) return "ayer";
+    const f = new Date(ts); return "el " + f.getDate() + "/" + (f.getMonth() + 1);
+  }
   function hace(ts) {
     const m = Math.round((Date.now() - ts) / MIN);
     if (m < 1) return "recién"; if (m < 60) return `hace ${m} min`;
     const h = Math.round(m / 60); if (h < 24) return `hace ${h} h`;
     const d = Math.round(h / 24); return d === 1 ? "ayer" : `hace ${d} días`;
   }
-  function fecha(ts, conHora) {
-    const o = { day: "numeric", month: "short" }; if (conHora) { o.hour = "2-digit"; o.minute = "2-digit"; }
-    return new Date(ts).toLocaleString("es-PY", o);
-  }
+  function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 
   // ---------- Escritura (demo) ----------
+  // Una opinión computable por dispositivo, plaza y día: volver a opinar la actualiza.
   function guardarOpinion(p, score) {
-    if (!lugar(p) || !ETQ[score]) return { ok: false, error: "invalida" };
+    if (!plaza(p) || !ETQ[score]) return { ok: false, error: "invalida" };
     const arr = leer(K.opiniones, []), ahora = Date.now();
-    let previa = null, op;
-    if (C.antiabuso.unaPorLugarYDia) previa = arr.find(o => o.p === p && diaDe(o.ts) === diaDe(ahora));
-    if (previa) { op = Object.assign({}, previa); previa.score = score; previa.ts = ahora; previa.actualizada = true; }
-    else { op = null; arr.push({ id: uid(), p, score, ts: ahora }); }
+    const previa = arr.find(o => o.p === p && diaDe(o.ts) === diaDe(ahora));
+    if (previa) {
+      previa.score = score; previa.ts = ahora;
+      if (score > NEG) { delete previa.cats; delete previa.texto; }
+    } else arr.push({ id: uid(), p, score, ts: ahora });
     if (!escribir(K.opiniones, arr)) return { ok: false, error: "almacenamiento" };
-    return { ok: true, id: previa ? previa.id : arr[arr.length - 1].id, actualizada: !!previa, anterior: op };
+    return { ok: true, id: previa ? previa.id : arr[arr.length - 1].id, actualizada: !!previa };
   }
-  function revertirOpinion(res) {
-    let arr = leer(K.opiniones, []);
-    if (res.actualizada && res.anterior) arr = arr.map(o => o.id === res.id ? res.anterior : o);
-    else arr = arr.filter(o => o.id !== res.id);
-    return escribir(K.opiniones, arr);
+  // "¿Qué viste?" se agrega a la misma opinión, no crea otro objeto.
+  function guardarDetalle(id, cats, texto) {
+    const arr = leer(K.opiniones, []), o = arr.find(x => x.id === id);
+    if (!o || o.score > NEG) return { ok: false, error: "invalida" };
+    o.cats = [...new Set((cats || []).filter(c => C.problemas.includes(c)))];
+    o.texto = String(texto || "").trim().slice(0, 280);
+    if (!o.cats.length && !o.texto) return { ok: false, error: "vacio" };
+    return escribir(K.opiniones, arr) ? { ok: true } : { ok: false, error: "almacenamiento" };
   }
-  function guardarReporte(r) {
-    if (!lugar(r.p)) return { ok: false, error: "invalida" };
-    const permitidas = categoriasDe(r.p);
-    const cats = (r.cats || []).filter(c => permitidas.includes(c));
-    const texto = String(r.texto || "").slice(0, 500).trim();
-    let foto = r.foto && r.foto.length < 450000 ? r.foto : null;
-    if (!r.reabre && !cats.length && !texto && !foto && !r.peligro) return { ok: false, error: "vacio" };
-    const arr = leer(K.reportes, []);
-    const id = r.id || uid();
-    if (arr.some(x => x.id === id)) return { ok: true, codigo: codigoDe(id), repetido: true };
-    const rep = { id, p: r.p, opinionId: r.opinionId || null, score: r.score || null, cats, texto, foto, peligro: !!r.peligro, reabre: r.reabre || null, ts: Date.now() };
-    arr.push(rep);
-    let sinFoto = false;
-    if (!escribir(K.reportes, arr)) {
-      rep.foto = null; sinFoto = !!foto;
-      if (!escribir(K.reportes, arr)) return { ok: false, error: "almacenamiento" };
-    }
-    return { ok: true, codigo: codigoDe(id), sinFoto };
+  function guardarAviso(tarjetaId, datos) {
+    const all = leer(K.avisos, {});
+    all[tarjetaId] = Object.assign({ ts: Date.now(), actor: ACTOR }, datos);
+    return escribir(K.avisos, all);
   }
-  function guardarEvento(casoId, ev) {
-    const all = leer(K.eventos, {});
-    (all[casoId] = all[casoId] || []).push(Object.assign({ ts: Date.now(), actor: "Operador (demo)" }, ev));
-    return escribir(K.eventos, all);
-  }
-  function decidirRevision(grupo, decision, motivo) {
-    const all = leer(K.revision, {}); all[grupo] = { decision, motivo: motivo || "", ts: Date.now(), actor: "Operador (demo)" };
+  function decidirRevision(grupo, decision) {
+    const all = leer(K.revision, {}); all[grupo] = { decision, ts: Date.now(), actor: ACTOR };
     return escribir(K.revision, all);
   }
   function borrarDemo() { Object.values(K).forEach(k => { try { localStorage.removeItem(k); } catch (e) {} }); }
 
   // ---------- Datos de ejemplo (reproducibles, relativos a hoy) ----------
+  // Cada plaza y cada día usan su propia semilla: un día ya generado no cambia al pasar las horas.
   function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   const PERFIL = {
-    "plaza-central": { vol: 6, sat: .79, drift: 0 }, "plaza-iglesia": { vol: 3.4, sat: .84, drift: .02 },
-    "costanera": { vol: 7, sat: .60, drift: .10 }, "mirador": { vol: 2, sat: .72, drift: 0 },
-    "mercado": { vol: 5, sat: .52, drift: -.12 }, "terminal": { vol: 4.4, sat: .45, drift: -.03 },
-    "polideportivo": { vol: 2.8, sat: .76, drift: .04 }, "cancha-norte": { vol: 0, sat: .6, drift: 0 },
-    "plaza-barrio-sur": { vol: .7, sat: .55, drift: 0 }, "parque-infantil": { vol: 1.6, sat: .66, drift: -.06 }
+    "plaza-central": { vol: 7, sat: .74, drift: -.04 }, "plaza-iglesia": { vol: 5.5, sat: .82, drift: .03 },
+    "plaza-san-jose": { vol: 4.6, sat: .62, drift: .07 }, "plaza-barrio-sur": { vol: 1.3, sat: .58, drift: 0 },
+    "plaza-norte": { vol: 0, sat: .6, drift: 0 }
   };
   const PESO_DIA = [1.4, .7, .8, .85, .9, 1.1, 1.5];
+  const PESO_PROB = { "Sucio": 3, "Sin luz": 1.6, "Algo roto": 1.4, "Otro": .6 };
   const TEXTOS = {
-    "Basura": ["Los basureros están llenos desde el fin de semana.", "Hay bolsas de basura acumuladas en la esquina.", "Mucha basura cerca de los juegos para chicos.", "Después del evento del sábado nadie limpió."],
-    "Iluminación": ["De noche está muy oscuro, varias luces no funcionan.", "La luminaria de la entrada parpadea y se apaga.", "Falta luz en el sector de los bancos."],
-    "Mobiliario dañado": ["Hay bancos rotos y un tobogán con tornillos sueltos.", "Falta una tapa de registro, es peligroso.", "La hamaca está rota hace semanas."],
-    "Seguridad": ["Hay vidrios rotos en el piso cerca de los juegos.", "De noche se juntan motos haciendo picadas.", "No hay nadie de seguridad a la tarde."],
-    "Baños": ["El baño no tiene agua ni papel.", "Los baños están cerrados desde temprano.", "El baño de mujeres está muy sucio."],
-    "Otro": ["El pasto está muy crecido.", "Hay perros sueltos que asustan a los chicos.", "Falta señalización para llegar."]
+    "Sucio": ["Los basureros están llenos desde el fin de semana.", "Hay bolsas de basura acumuladas en la esquina.", "Mucha basura cerca de los juegos para chicos.", "Después del evento del sábado nadie limpió."],
+    "Sin luz": ["De noche está muy oscuro, varias luces no funcionan.", "La luminaria de la entrada parpadea y se apaga.", "Falta luz en el sector de los bancos."],
+    "Algo roto": ["Hay bancos rotos y un tobogán con tornillos sueltos.", "La hamaca está rota hace semanas.", "El bebedero pierde agua."],
+    "Otro": ["El pasto está muy crecido.", "Hay perros sueltos que asustan a los chicos.", "Falta un cartel con el horario."]
   };
-  const NOTAS = {
-    "Basura": ["Se vaciaron los contenedores y se limpió el sector.", "Se sumó una recolección extra los domingos.", "Se limpió el área y se colocó un contenedor adicional."],
-    "Iluminación": ["Se reemplazaron 3 luminarias por LED.", "Se reparó el cableado del sector de bancos."],
-    "Mobiliario dañado": ["Se repararon 2 bancos y se ajustó el tobogán.", "Se repuso la tapa de registro."],
-    "Seguridad": ["Se retiraron los vidrios y se coordinó patrullaje nocturno.", "Se mejoró la iluminación del acceso."],
-    "Baños": ["Se repuso agua y papel; se fijó horario de limpieza.", "Se reabrieron los baños con horario extendido."],
-    "Otro": ["Se cortó el pasto del sector.", "Se colocó señalización."],
-    "Sin clasificar": ["Se revisó el lugar y se resolvió lo reportado."]
-  };
-  const MOTIVO_PROG = "Requiere compra de materiales; se informará el avance.";
+  const GUION = [
+    { min: 220, score: 2, cats: ["Sucio"], texto: "Los basureros están llenos desde el sábado." },
+    { min: 135, score: 1, cats: ["Sucio"], texto: "" },
+    { min: 65, score: 2, cats: ["Sucio", "Algo roto"], texto: "Mucha basura cerca de los juegos y un banco roto." },
+    { min: 25, score: 1, cats: ["Sucio"], texto: "" }
+  ];
 
-  let _ej = null;
+  let _ej = null, _ejDia = null;
   function ejemplo() {
-    if (_ej) return _ej;
-    const R = rng(574), pick = a => a[Math.floor(R() * a.length)];
-    const poisson = l => { if (!l) return 0; let L = Math.exp(-l), k = 0, p = 1; do { k++; p *= R(); } while (p > L); return k - 1; };
-    const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
-    const ahora = Date.now(), ops = [], reps = [];
-    Object.keys(C.lugares).forEach(id => {
-      const P = PERFIL[id] || { vol: 2, sat: .65, drift: 0 }, cats = categoriasDe(id);
-      for (let d = 55; d >= 0; d--) {
-        const f = new Date(hoy.getTime() - d * DIA);
-        const n = poisson(P.vol * PESO_DIA[f.getDay()]);
-        const sat = Math.min(.95, Math.max(.2, P.sat + P.drift * (d < 14 ? 1 : -0.3)));
+    const hoy = inicioDia(Date.now());
+    if (_ej && _ejDia === hoy) return _ej;
+    const ahora = Date.now(), ops = [], decisiones = {};
+    const numDia = t => Math.round((t + 12 * H) / DIA);
+    Object.keys(C.plazas).forEach(id => {
+      const P = PERFIL[id] || { vol: 2, sat: .65, drift: 0 };
+      for (let d = 59; d >= 0; d--) {
+        const f = hoy - d * DIA, fd = new Date(f), R = rng(hash(id) ^ (numDia(f) * 7919));
+        const pick = a => a[Math.floor(R() * a.length)];
+        let n = 0; { const l = P.vol * PESO_DIA[fd.getDay()]; if (l) { const L = Math.exp(-l); let p = 1; do { n++; p *= R(); } while (p > L); n--; } }
+        const sat = Math.min(.95, Math.max(.2, P.sat + P.drift * (d < 7 ? 1 : d < 28 ? .3 : -.3)));
         for (let i = 0; i < n; i++) {
-          const ts = f.getTime() + (7 + R() * 14) * H;
-          if (ts > ahora) { R(); continue; }
+          const ts = f + (7 + R() * 14) * H;
           const score = R() < sat ? (R() < .55 ? 4 : 3) : (R() < .4 ? 1 : 2);
-          const oid = `e-${id}-${d}-${i}`;
-          ops.push({ id: oid, p: id, score, ts, ej: true });
-          if (score <= C.umbralDetalle && R() < .45) {
-            const pesos = cats.map(c => c === "Basura" || c === "Baños" ? 3 : c === "Otro" ? .6 : 1.5), tot = pesos.reduce((a, b) => a + b, 0);
-            const pc = () => { let x = R() * tot; for (let k = 0; k < cats.length; k++) { x -= pesos[k]; if (x <= 0) return cats[k]; } return cats[0]; };
+          const o = { id: `e-${id}-${d}-${i}`, p: id, score, ts, ej: true };
+          if (score <= NEG && R() < .45) {
+            const tot = C.problemas.reduce((a, c) => a + (PESO_PROB[c] || 1), 0);
+            const pc = () => { let x = R() * tot; for (const c of C.problemas) { x -= PESO_PROB[c] || 1; if (x <= 0) return c; } return C.problemas[0]; };
             const c1 = pc(), cs = [c1]; if (R() < .25) { const c2 = pc(); if (c2 !== c1) cs.push(c2); }
-            reps.push({ id: "r" + oid, p: id, opinionId: oid, score, cats: cs, texto: R() < .6 ? pick(TEXTOS[c1] || TEXTOS["Otro"]) : "", foto: null,
-              peligro: (c1 === "Seguridad" || c1 === "Mobiliario dañado") && R() < .3, ts: ts + 30000, ej: true });
+            o.cats = cs; o.texto = R() < .5 ? pick(TEXTOS[c1] || TEXTOS["Otro"]) : "";
           }
+          if (ts <= ahora) ops.push(o);
+        }
+        // Lo que ya hizo el encargado en días anteriores (hoy queda todo pendiente)
+        if (d > 0) {
+          const x = R();
+          if (d === 1) { if (x < .6) decisiones[id + "|" + diaDe(f)] = { estado: "avisado", demoraH: 1 + R() * 4 }; }
+          else decisiones[id + "|" + diaDe(f)] = x < .85 ? { estado: "avisado", demoraH: 1 + R() * 4 } : { estado: "descartado", demoraH: .5 + R() * 3 };
         }
       }
     });
-    // Ráfaga sospechosa: 38 "Muy bien" en 6 minutos en la Costanera, hace 3 días
-    const b0 = hoy.getTime() - 3 * DIA + 14 * H + 2 * MIN;
-    for (let i = 0; i < 38; i++) ops.push({ id: "b-" + i, p: "costanera", score: 4, ts: b0 + i * 9500, ej: true });
-
-    // Casos de ejemplo: reportes del mismo lugar y problema se agrupan; cada caso tiene su ciclo
-    reps.sort((a, b) => a.ts - b.ts);
-    const casos = [], abiertos = {};
-    reps.forEach(r => {
-      const cat = r.cats[0], key = r.p + "|" + cat, c = abiertos[key];
-      if (c && r.ts - c.ts0 < 6 * DIA && !(c.finTs && c.finTs < r.ts)) { c.reportes.push(r); if (r.peligro) c.peligro = true; return; }
-      const nc = { id: "c-" + r.id, p: r.p, cat, ts0: r.ts, reportes: [r], peligro: r.peligro, base: [], ej: true };
-      const equipo = C.equipos[cat] || "Intendencia";
-      const sinRespuesta = ahora - r.ts < 5 * DIA && ahora - r.ts > 2.2 * DIA && R() < .25;   // casos vencidos para la demo
-      const t1 = sinRespuesta ? 9999 : R() < .14 ? 52 + R() * 40 : 1 + R() * 20, t2 = t1 + 2 + R() * 18;
-      const prog = (cat === "Iluminación" || cat === "Mobiliario dañado") && !nc.peligro && R() < .2;
-      const t3 = prog ? null : t2 + 3 + R() * (nc.peligro ? 20 : 70);
-      const ev = [{ ts: r.ts + t1 * H, estado: "Asignada", responsable: equipo, nota: "Asignado a " + equipo, actor: "Mesa de entrada" },
-                  { ts: r.ts + t2 * H, estado: "En proceso", actor: equipo }];
-      if (prog) {
-        ev.push({ ts: r.ts + (t2 + 1) * H, estado: "Programada", nota: MOTIVO_PROG, hasta: r.ts + 18 * DIA, actor: equipo });
-        ev.push({ ts: r.ts + (15 + R() * 3) * DIA, estado: "Resuelta", nota: pick(NOTAS[cat]), actor: equipo });
-      } else ev.push({ ts: r.ts + t3 * H, estado: "Resuelta", nota: pick(NOTAS[cat] || NOTAS["Sin clasificar"]), actor: equipo });
-      nc.base = ev.filter(e => e.ts <= ahora);
-      nc.finTs = ev[ev.length - 1].ts;
-      casos.push(nc); abiertos[key] = nc;
+    // Guion de la demo: hoy, varios vecinos marcaron "Sucio" en la plaza principal
+    const pg = C.plazas["plaza-central"] ? "plaza-central" : Object.keys(C.plazas)[0];
+    GUION.forEach((g, i) => {
+      const ts = Math.min(ahora - (GUION.length - i) * 20000, Math.max(hoy + (i + 1) * MIN, ahora - g.min * MIN));
+      ops.push({ id: "g-" + i, p: pg, score: g.score, cats: g.cats, texto: g.texto, ts, ej: true });
     });
-    // Caso guion para la demo: un peligro reciente, ya asignado y dentro de plazo
-    if (C.lugares["parque-infantil"]) {
-      const t = ahora - 20 * H, rp = { id: "r-guion-1", p: "parque-infantil", opinionId: null, score: 1, cats: ["Mobiliario dañado"], texto: "La hamaca tiene la cadena cortada, un nene casi se cae.", foto: null, peligro: true, ts: t, ej: true };
-      const eq = C.equipos["Mobiliario dañado"];
-      casos.push({ id: "c-guion-1", p: rp.p, cat: rp.cats[0], ts0: t, reportes: [rp], peligro: true, ej: true,
-        base: [{ ts: t + 1.5 * H, estado: "Asignada", responsable: eq, nota: "Asignado a " + eq, actor: "Mesa de entrada" }] });
-    }
-    _ej = { ops, casos };
+    // Ráfaga sospechosa: 40 "Muy bien" en 6 minutos, hace 2 días
+    const pr = C.plazas["plaza-iglesia"] ? "plaza-iglesia" : Object.keys(C.plazas)[0];
+    const b0 = hoy - 2 * DIA + 14 * H + 2 * MIN;
+    for (let i = 0; i < 40; i++) ops.push({ id: "b-" + i, p: pr, score: 4, ts: b0 + i * 9000, ej: true });
+    _ej = { ops, decisiones }; _ejDia = hoy;
     return _ej;
   }
 
   // ---------- Modelo combinado: ejemplo + lo enviado en este navegador + decisiones ----------
-  function modelo() {
-    const ej = ejemplo();
-    const misOps = leer(K.opiniones, []).filter(o => lugar(o.p) && ETQ[o.score]).map(o => Object.assign({}, o, { mia: true }));
-    const opiniones = ej.ops.map(o => Object.assign({}, o)).concat(misOps);
+  function sugerirContacto(cats) {
+    const top = Object.entries(cats || {}).sort((a, b) => b[1] - a[1]).map(x => x[0]);
+    for (const c of top) { const k = C.agenda.find(a => (a.problemas || []).includes(c)); if (k) return k; }
+    return C.agenda[0] || null;
+  }
 
-    // Detección de ráfagas: mismas reglas para elogios y críticas
+  function modelo() {
+    const ej = ejemplo(), ahora = Date.now();
+    const mias = leer(K.opiniones, []).filter(o => plaza(o.p) && ETQ[o.score]).map(o => Object.assign({}, o, { mia: true }));
+    const opiniones = ej.ops.map(o => Object.assign({}, o)).concat(mias);
+
+    // Ráfagas: mismas reglas para elogios y críticas
     const ventana = C.antiabuso.rafagaMinutos * MIN, minimo = C.antiabuso.rafagaMinimo;
-    const decisiones = leer(K.revision, {}), grupos = {};
-    const porLugar = {};
-    opiniones.forEach(o => (porLugar[o.p] = porLugar[o.p] || []).push(o));
-    Object.values(porLugar).forEach(lista => {
+    const decRev = leer(K.revision, {}), grupos = {}, porPlaza = {};
+    opiniones.forEach(o => (porPlaza[o.p] = porPlaza[o.p] || []).push(o));
+    Object.values(porPlaza).forEach(lista => {
       lista.sort((a, b) => a.ts - b.ts);
       const marca = new Array(lista.length).fill(false);
       let i = 0;
@@ -236,7 +202,7 @@
       });
     });
     Object.values(grupos).forEach(g => {
-      const d = decisiones[g.id];
+      const d = decRev[g.id];
       g.estado = d ? d.decision : "revision"; g.decision = d || null;
       const sc = {}; g.ops.forEach(o => sc[o.score] = (sc[o.score] || 0) + 1);
       g.dominante = +Object.entries(sc).sort((a, b) => b[1] - a[1])[0][0];
@@ -244,61 +210,56 @@
     });
     opiniones.forEach(o => { if (!o.estado) o.estado = "admitida"; });
 
-    // Casos
-    const eventos = leer(K.eventos, {});
-    const casos = ej.casos.map(c => Object.assign({}, c, { reportes: c.reportes.slice(), eventos: c.base.slice() }));
-    const misReps = leer(K.reportes, []).filter(r => lugar(r.p)).map(r => Object.assign({}, r, { mia: true, codigo: codigoDe(r.id) }));
-    casos.forEach(c => c.reportes.forEach(r => r.codigo = codigoDe(r.id)));
-    const estadoA = (c, ts) => { let e = "Nueva"; c.eventos.forEach(x => { if (x.ts <= ts) e = x.estado; }); return e; };
-    // eventos guardados por el operador
-    casos.forEach(c => { if (eventos[c.id]) c.eventos = c.eventos.concat(eventos[c.id]); c.eventos.sort((a, b) => a.ts - b.ts); });
-    misReps.sort((a, b) => a.ts - b.ts).forEach(r => {
-      if (r.reabre) {
-        const c = casos.find(x => x.id === r.reabre);
-        if (c) { c.reportes.push(r); c.eventos.push({ ts: r.ts, estado: "Reabierta", nota: "El vecino indicó que el problema sigue.", actor: "Vecino" }); c.eventos.sort((a, b) => a.ts - b.ts); }
-        return;
+    // Tarjetas: opiniones negativas admitidas, agrupadas por plaza y día
+    const avisos = leer(K.avisos, {}), map = {};
+    opiniones.filter(o => o.estado === "admitida" && o.score <= NEG).forEach(o => {
+      const id = o.p + "|" + diaDe(o.ts);
+      (map[id] = map[id] || { id, p: o.p, dia: diaDe(o.ts), diaTs: inicioDia(o.ts), ops: [] }).ops.push(o);
+    });
+    const tarjetas = Object.values(map).map(t => {
+      t.ops.sort((a, b) => a.ts - b.ts);
+      t.n = t.ops.length;
+      t.muyMal = t.ops.filter(o => o.score === 1).length; t.mal = t.n - t.muyMal;
+      t.cats = {}; t.ops.forEach(o => (o.cats || []).forEach(c => t.cats[c] = (t.cats[c] || 0) + 1));
+      t.comentarios = t.ops.filter(o => o.texto).map(o => ({ texto: o.texto, ts: o.ts, mia: !!o.mia })).reverse();
+      t.tsUlt = t.ops[t.n - 1].ts;
+      t.mia = t.ops.some(o => o.mia);
+      t.sugerido = sugerirContacto(t.cats);
+      let dec = avisos[t.id] || null;
+      if (!dec && ej.decisiones[t.id]) {
+        const s = ej.decisiones[t.id], ultEj = Math.max(...t.ops.filter(o => o.ej).map(o => o.ts));
+        dec = { estado: s.estado, ts: Math.min(ahora - 10 * MIN, ultEj + s.demoraH * H), actor: ACTOR, ej: true };
+        if (s.estado === "avisado") dec.contacto = t.sugerido ? t.sugerido.nombre : "";
       }
-      const cat = r.cats[0] || "Sin clasificar";
-      const c = casos.find(x => x.p === r.p && x.cat === cat && ABIERTOS.includes(estadoA(x, r.ts)));
-      if (c) { c.reportes.push(r); if (r.peligro) c.peligro = true; return; }
-      const nc = { id: "c-" + r.id, p: r.p, cat, ts0: r.ts, reportes: [r], peligro: r.peligro, eventos: (eventos["c-" + r.id] || []).slice().sort((a, b) => a.ts - b.ts) };
-      casos.push(nc);
-    });
-    const ahora = Date.now(), sla = C.slaHoras * H;
-    casos.forEach(c => {
-      c.estado = estadoA(c, Infinity);
-      c.abierto = ABIERTOS.includes(c.estado);
-      c.mio = c.reportes.some(r => r.mia);
-      c.codigo = codigoDe(c.reportes[0].id);
-      c.tsUlt = Math.max(...c.reportes.map(r => r.ts));
-      const resp = c.eventos.filter(e => e.responsable).pop(); c.responsable = resp ? resp.responsable : "";
-      const primera = c.eventos.find(e => e.estado !== "Reabierta");
-      c.primeraRespTs = primera ? primera.ts : null;
-      const fin = c.estado === "Resuelta" ? c.eventos.filter(e => e.estado === "Resuelta").pop() : null;
-      c.resueltaTs = fin ? fin.ts : null; c.nota = fin ? fin.nota : ""; c.fotoDespues = fin ? fin.foto || null : null;
-      c.reabierta = c.eventos.some(e => e.estado === "Reabierta") && c.abierto;
-      const reab = c.eventos.filter(e => e.estado === "Reabierta").pop();
-      const desde = reab && c.estado === "Reabierta" ? reab.ts : c.ts0;
-      const prog = c.estado === "Programada" ? c.eventos.filter(e => e.estado === "Programada").pop() : null;
-      c.programadaHasta = prog ? prog.hasta : null;
-      // Vencido: sin primera respuesta dentro del plazo, o programado con la fecha de actualización ya pasada
-      c.vencido = ((c.estado === "Nueva" || c.estado === "Reabierta") && ahora - desde > sla) || (!!c.programadaHasta && c.programadaHasta < ahora);
-      c.textos = c.reportes.filter(r => r.texto).map(r => r.texto);
-      c.foto = (c.reportes.slice().reverse().find(r => r.foto) || {}).foto || null;
-      c.prioridad = (c.abierto ? 0 : -1e6) + (c.peligro ? 1e5 : 0) + (c.vencido ? 5e4 : 0) + (c.reabierta ? 3e4 : 0) + c.reportes.length * 500 + (ahora - c.ts0) / H;
-    });
-    return { opiniones, casos, grupos: Object.values(grupos).sort((a, b) => b.ini - a.ini), ABIERTOS };
+      t.estado = dec && dec.estado !== "pendiente" ? dec.estado : "pendiente";
+      t.decision = t.estado === "pendiente" ? null : dec;
+      t.nuevas = t.estado === "avisado" ? t.ops.filter(o => o.ts > dec.ts).length : 0;
+      return t;
+    }).sort((a, b) => b.tsUlt - a.tsUlt);
+
+    return { opiniones, tarjetas, grupos: Object.values(grupos).sort((a, b) => b.ini - a.ini) };
   }
 
-  function casoPorCodigo(codigo) {
-    const m = modelo(); codigo = String(codigo || "").trim().toUpperCase();
-    return m.casos.find(c => c.reportes.some(r => r.codigo === codigo)) || null;
+  // ---------- Mensaje de WhatsApp ----------
+  function listar(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " y " + a[a.length - 1]; }
+  function mensaje(t, contacto) {
+    const cats = Object.entries(t.cats).sort((a, b) => b[1] - a[1]);
+    const resumen = cats.length
+      ? listar(cats.map(([c, n], i) => i === 0 ? `${n} ${n === 1 ? "vecino marcó" : "vecinos marcaron"} '${c}'` : `${n} '${c}'`))
+      : `${t.n} ${t.n === 1 ? "vecino dio una opinión negativa" : "vecinos dieron una opinión negativa"}`;
+    const com = t.comentarios[0] ? ` Un comentario: '${t.comentarios[0].texto.replace(/[.\s]+$/, "")}'.` : "";
+    const v = { nombre: contacto ? contacto.nombre : "", plaza: C.plazas[t.p].nombre, cuando: cuando(t.tsUlt), resumen, comentario: com, producto: C.producto };
+    return C.mensaje.replace(/\{(\w+)\}/g, (m, k) => k in v ? v[k] : m).replace(/\s+,/g, ",").replace(/ {2,}/g, " ").trim();
+  }
+  function enlaceWhatsApp(telefono, texto) {
+    const tel = String(telefono || "").replace(/\D/g, "");
+    return "https://wa.me/" + tel + "?text=" + encodeURIComponent(texto);
   }
 
   window.Escucha = {
-    C, K, ETQ, ESCALA_COLOR, H, DIA, ABIERTOS,
-    aplicarTema, carita, lugar, categoriasDe, disponible, uid, codigoDe,
-    guardarOpinion, revertirOpinion, guardarReporte, guardarEvento, decidirRevision, borrarDemo,
-    modelo, casoPorCodigo, esc, fmt, hace, fecha
+    C, K, ETQ, NEG, ESCALA_COLOR, H, DIA, MIN,
+    aplicarTema, carita, plaza, disponible, uid,
+    guardarOpinion, guardarDetalle, guardarAviso, decidirRevision, borrarDemo,
+    modelo, mensaje, enlaceWhatsApp, sugerirContacto, esc, fmt, hora, hace, cuando, diaDe, inicioDia
   };
 })();
