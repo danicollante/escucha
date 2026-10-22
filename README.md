@@ -23,8 +23,8 @@ La versión anterior (casos, asignaciones, estados y códigos de seguimiento) qu
 **Central.** El encargado abre el panel una o dos veces por día:
 
 1. **Indicadores del período** (7 o 28 días): % de satisfacción, opiniones recibidas y pendientes de avisar, más una frase "Lo principal" armada con reglas simples.
-2. **Para avisar hoy**: las opiniones negativas de hoy y ayer, agrupadas por plaza y día. Cada tarjeta tiene dos acciones:
-   - **Avisar por WhatsApp**: elige un contacto de la agenda, edita el mensaje ya armado y abre `https://wa.me/<teléfono>?text=…` (o `https://wa.me/?text=…` si el contacto no tiene teléfono). La tarjeta queda "Avisado a Juan · 14:32".
+2. **Para avisar hoy**: las opiniones negativas de hoy y ayer, agrupadas por plaza y día. Se arma una tarjeta cuando hay 2 o más negativas en la plaza ese día o alguien marcó un problema o escribió algo; un "Mal" aislado y sin detalle solo cuenta para el termómetro. Cada tarjeta tiene dos acciones:
+   - **Avisar por WhatsApp**: elige un contacto de la agenda, edita el mensaje ya armado y abre `https://wa.me/<teléfono>?text=…` (o `https://wa.me/?text=…` si el contacto no tiene teléfono). La tarjeta queda "Enviado por WhatsApp a Juan · 14:32". En la demo esto significa que se abrió WhatsApp con el mensaje: confirmar la entrega requiere la WhatsApp Business API.
    - **Descartar**: sale de la lista y queda registrado quién y cuándo.
 
    Una tarjeta solo puede estar **pendiente, avisada o descartada**.
@@ -44,7 +44,7 @@ La versión anterior (casos, asignaciones, estados y códigos de seguimiento) qu
 ## Guion de demo (3 pasos)
 
 1. Abrí `f/?p=plaza-central`, tocá **Mal**, marcá **Sucio** y enviá (el comentario es opcional).
-2. En `panel/` (mismo navegador), la opinión aparece en vivo en **Para avisar hoy**. Tocá **Avisar por WhatsApp**, elegí a Juan y abrí WhatsApp: la tarjeta pasa a **Avisado a Juan**.
+2. En `panel/` (mismo navegador), la opinión aparece en vivo en **Para avisar hoy**. Tocá **Avisar por WhatsApp**, elegí a Juan y abrí WhatsApp: la tarjeta pasa a **Enviado por WhatsApp a Juan**.
 3. Bajá a **Plazas** para ver el mapa y la lista, y en **Calidad del dato** admití o descartá la ráfaga de ejemplo.
 
 **Borrar mis pruebas** (arriba en la central) deja todo como al inicio.

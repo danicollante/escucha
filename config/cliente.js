@@ -29,7 +29,8 @@ window.ESCUCHA_CONFIG = {
     { valor: 3, etiqueta: "Bien" },
     { valor: 4, etiqueta: "Muy bien" }
   ],
-  umbralNegativo: 2,     // Muy mal y Mal ofrecen "¿Qué viste?" y llegan a "Para avisar hoy"
+  umbralNegativo: 2,     // Muy mal y Mal ofrecen "¿Qué viste?"
+  tarjetaMinimo: 2,      // "Para avisar hoy": tarjeta si hay 2+ negativas en la plaza ese día, o si alguien marcó un problema o escribió algo
   emergencia: "Si es una emergencia, llamá al 911.",
 
   // Antiabuso (en la demo se aplica en el navegador; en producción, en el servidor)

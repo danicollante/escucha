@@ -178,7 +178,7 @@
 
   <div class="grid">
     <section class="col" aria-labelledby="hAvisar">
-      <h2 class="h-sec" id="hAvisar">Para avisar hoy <span class="count" id="cPend">0</span> <small>Opiniones Muy mal y Mal de hoy y ayer, por plaza y día</small></h2>
+      <h2 class="h-sec" id="hAvisar">Para avisar hoy <span class="count" id="cPend">0</span> <small>Hoy y ayer, por plaza: cuando hay 2 o más opiniones negativas o alguien contó qué vio</small></h2>
       <div class="col" id="avisar"></div>
       <details class="desc" id="descartadas" hidden><summary></summary><ul></ul></details>
     </section>
@@ -259,7 +259,7 @@
     const pend = M.tarjetas.filter(t => enLista(t) && t.estado === "pendiente");
     const dp = s.pct !== null && sa.pct !== null ? s.pct - sa.pct : 0;
     const dn = sa.n ? Math.round((s.n - sa.n) / sa.n * 100) : 0;
-    const delta = (v, suf) => v === 0 ? `Sin cambios vs. período anterior` : `<span class="${v > 0 ? "up" : "down"}">${v > 0 ? "▲" : "▼"} ${Math.abs(v)}${suf}</span> vs. período anterior`;
+    const delta = (v, suf) => v === 0 ? `Sin cambios vs. período anterior` : `<span class="${v > 0 ? "up" : "down"}">${v > 0 ? "▲" : "▼"} ${Math.abs(v)}${suf === " pts" && Math.abs(v) === 1 ? " pt" : suf}</span> vs. período anterior`;
     $("kpis").innerHTML = `
       <div class="kpi"><div class="kpi-l">Satisfacción</div><div class="kpi-v">${s.pct ?? "–"}%</div><div class="kpi-d">${delta(dp, " pts")}</div></div>
       <div class="kpi"><div class="kpi-l">Opiniones recibidas</div><div class="kpi-v">${fmt(s.n)}</div><div class="kpi-d">${s.rev ? `${fmt(s.rev)} en revisión, no se cuentan` : delta(dn, "%")}</div></div>
@@ -288,14 +288,14 @@
     $("avisar").innerHTML = lista.length ? lista.map(t => {
       const cats = Object.entries(t.cats).sort((a, b) => b[1] - a[1]);
       const coms = t.comentarios.slice(0, 3);
-      const av = t.estado === "avisado" ? `<div class="estado-av"><span>✓ Avisado${t.decision.contacto ? " a " + esc(t.decision.contacto) : ""} · ${E.cuando(t.decision.ts) === "hoy" ? "" : E.cuando(t.decision.ts) + " "}${E.hora(t.decision.ts)}</span>${t.nuevas ? `<span class="nuevas">${t.nuevas} ${t.nuevas === 1 ? "nueva" : "nuevas"} desde el aviso</span>` : ""}</div>` : "";
+      const av = t.estado === "avisado" ? `<div class="estado-av"><span>✓ Enviado por WhatsApp${t.decision.contacto ? " a " + esc(t.decision.contacto) : ""} · ${E.cuando(t.decision.ts) === "hoy" ? "" : E.cuando(t.decision.ts) + " "}${E.hora(t.decision.ts)}</span>${t.nuevas ? `<span class="nuevas">${t.nuevas} ${t.nuevas === 1 ? "nueva" : "nuevas"} desde el aviso</span>` : ""}</div>` : "";
       return `<article class="tj ${t.estado}" data-id="${esc(t.id)}">
         <div class="tj-top">${t.mia ? `<span class="mia">Tu prueba</span>` : ""}<span class="tj-t">${esc(nombre(t.p))}</span><span class="tj-dia">· ${E.cuando(t.tsUlt)}</span><span class="tj-h">último ${E.hora(t.tsUlt)}</span></div>
         <div class="caras">${t.muyMal ? `<span>${E.carita(1)} ${t.muyMal} Muy mal</span>` : ""}${t.mal ? `<span>${E.carita(2)} ${t.mal} Mal</span>` : ""}</div>
         ${cats.length ? `<div class="probs">${cats.map(([c, n]) => `<span class="pr">${esc(c)} <b>×${n}</b></span>`).join("")}</div>` : ""}
         ${coms.length ? `<div class="coms">${coms.map(c => `<div><q>${esc(c.texto)}</q><small>${E.hora(c.ts)}</small></div>`).join("")}${t.comentarios.length > 3 ? `<small>y ${t.comentarios.length - 3} comentarios más</small>` : ""}</div>` : `<p class="sin-com">Sin comentarios escritos.</p>`}
         ${av}
-        <div class="acts"><button class="btn wa" type="button" data-a="avisar">${WA}${t.estado === "avisado" ? "Avisar de nuevo" : "Avisar por WhatsApp"}</button><button class="btn sec" type="button" data-a="descartar" aria-label="Descartar ${esc(nombre(t.p))} ${E.cuando(t.tsUlt)}">Descartar</button></div>
+        <div class="acts"><button class="btn wa" type="button" data-a="avisar">${WA}${t.estado === "avisado" ? "Reenviar" : "Avisar por WhatsApp"}</button><button class="btn sec" type="button" data-a="descartar" aria-label="Descartar ${esc(nombre(t.p))} ${E.cuando(t.tsUlt)}">Descartar</button></div>
       </article>`;
     }).join("") : `<div class="vacio">No hay opiniones negativas de hoy ni de ayer para avisar.</div>`;
     $("avisar").querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", () => {
@@ -339,7 +339,7 @@
     const k = contactoSel();
     E.guardarAviso(actual.id, { estado: "avisado", contacto: k ? k.nombre : "", rol: k ? k.rol : "", mensaje: $("dlgM").value });
     $("dlg").close();
-    aviso(`Avisado${k ? " a " + k.nombre : ""} · ${nombre(actual.p)}`);
+    aviso(`Enviado por WhatsApp${k ? " a " + k.nombre : ""} · ${nombre(actual.p)}`);
     construir(); refrescar();
   });
 

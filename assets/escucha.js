@@ -104,8 +104,8 @@
   // Cada plaza y cada día usan su propia semilla: un día ya generado no cambia al pasar las horas.
   function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   const PERFIL = {
-    "plaza-central": { vol: 7, sat: .74, drift: -.04 }, "plaza-iglesia": { vol: 5.5, sat: .82, drift: .03 },
-    "plaza-san-jose": { vol: 4.6, sat: .62, drift: .07 }, "plaza-barrio-sur": { vol: 1.3, sat: .58, drift: 0 },
+    "plaza-central": { vol: 7, sat: .82, drift: -.03 }, "plaza-iglesia": { vol: 5.5, sat: .80, drift: .03 },
+    "plaza-san-jose": { vol: 4.6, sat: .66, drift: .05 }, "plaza-barrio-sur": { vol: 1.3, sat: .6, drift: .02 },
     "plaza-norte": { vol: 0, sat: .6, drift: 0 }
   };
   const PESO_DIA = [1.4, .7, .8, .85, .9, 1.1, 1.5];
@@ -136,9 +136,12 @@
         const pick = a => a[Math.floor(R() * a.length)];
         let n = 0; { const l = P.vol * PESO_DIA[fd.getDay()]; if (l) { const L = Math.exp(-l); let p = 1; do { n++; p *= R(); } while (p > L); n--; } }
         const sat = Math.min(.95, Math.max(.2, P.sat + P.drift * (d < 7 ? 1 : d < 28 ? .3 : -.3)));
+        // Reparto estratificado: la satisfacción diaria sigue el perfil sin ruido exagerado
+        const nSat = Math.min(n, Math.max(0, Math.round(n * sat + (R() - .5))));
+        const orden = Array.from({ length: n }, (_, k) => k < nSat).sort(() => R() - .5);
         for (let i = 0; i < n; i++) {
           const ts = f + (7 + R() * 14) * H;
-          const score = R() < sat ? (R() < .55 ? 4 : 3) : (R() < .4 ? 1 : 2);
+          const score = orden[i] ? (R() < .55 ? 4 : 3) : (R() < .4 ? 1 : 2);
           const o = { id: `e-${id}-${d}-${i}`, p: id, score, ts, ej: true };
           if (score <= NEG && R() < .45) {
             const tot = C.problemas.reduce((a, c) => a + (PESO_PROB[c] || 1), 0);
@@ -216,7 +219,9 @@
       const id = o.p + "|" + diaDe(o.ts);
       (map[id] = map[id] || { id, p: o.p, dia: diaDe(o.ts), diaTs: inicioDia(o.ts), ops: [] }).ops.push(o);
     });
-    const tarjetas = Object.values(map).map(t => {
+    // Un "Mal" aislado y sin detalle solo cuenta para el termómetro: no genera tarjeta (evita microgestión)
+    const minTarjeta = C.tarjetaMinimo || 2;
+    const tarjetas = Object.values(map).filter(t => t.ops.length >= minTarjeta || t.ops.some(o => (o.cats && o.cats.length) || o.texto)).map(t => {
       t.ops.sort((a, b) => a.ts - b.ts);
       t.n = t.ops.length;
       t.muyMal = t.ops.filter(o => o.score === 1).length; t.mal = t.n - t.muyMal;
